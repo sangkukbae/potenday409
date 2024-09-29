@@ -73,12 +73,13 @@ jobs:
       - name: Copy Files via SSH
         uses: easingthemes/ssh-deploy@v5.1.0
         with:
-          SSH_PRIVATE_KEY: ${{ secrets.VM_SSH_PRIVATE_KEY }}
+          SSH_PRIVATE_KEY: ${{ secrets.VM_SSH_KEY }}
           ARGS: '-rlgoDzvc -i'
           REMOTE_HOST: ${{ secrets.VM_HOST }}
           REMOTE_USER: ${{ secrets.VM_USER }}
           SOURCE: '.'
           TARGET: '~/potenday409'
+          EXCLUDE: '/dist/, /node_modules/'
           SCRIPT_BEFORE: |
             whoami
             ls -al
