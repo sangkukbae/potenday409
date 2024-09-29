@@ -12,8 +12,5 @@
 	"dependencies": {},
 	"devDependencies": {
 		"turbo": "^2.1.2"
-	},
-	"workspaces": [
-		"packages/*"
-	]
+	}
 }
