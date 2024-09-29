@@ -71,16 +71,18 @@ jobs:
         run: pnpm build
 
       - name: Copy Files via SSH
-        uses: appleboy/scp-action@v0.1.3
+        uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.VM_HOST }}
           username: ${{ secrets.VM_USER }}
           key: ${{ secrets.VM_SSH_KEY }}
           source: '.'
           target: '~/potenday409'
+          port: 22
+          debug: true
 
       - name: Restart PM2 Processes
-        uses: appleboy/ssh-action@v0.1.3
+        uses: appleboy/ssh-action@v0.1.7
         with:
           host: ${{ secrets.VM_HOST }}
           username: ${{ secrets.VM_USER }}
