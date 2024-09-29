@@ -71,22 +71,14 @@ jobs:
         run: pnpm build
 
       - name: Copy Files via SSH
-        uses: easingthemes/ssh-deploy@v5.1.0
+        uses: appleboy/scp-action@v0.1.7
         with:
-          SSH_PRIVATE_KEY: ${{ secrets.VM_SSH_KEY }}
-          ARGS: '-rlgoDzvc -i'
-          REMOTE_HOST: ${{ secrets.VM_HOST }}
-          REMOTE_USER: ${{ secrets.VM_USER }}
-          SOURCE: '.'
-          TARGET: '~/potenday409'
-          EXCLUDE: '/dist/, /node_modules/'
-          SCRIPT_BEFORE: |
-            whoami
-            ls -al
-          SCRIPT_AFTER: |
-            whoami
-            ls -al
-            echo $RSYNC_STDOUT
+          host: ${{ secrets.VM_HOST }}
+          username: ${{ secrets.VM_USER }}
+          key: ${{ secrets.VM_SSH_PRIVATE_KEY }}
+          source: '.'
+          target: '~/potenday409'
+          debug: true
 
       - name: Restart PM2 Processes
         uses: appleboy/ssh-action@v1.0.3
