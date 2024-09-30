@@ -271,3 +271,4 @@ $RECYCLE.BIN/
 # End of https://www.toptal.com/developers/gitignore/api/node,macos,nextjs,windows,visualstudiocode
 
 *.iml
+!/apps/backend/src/configs/.env
