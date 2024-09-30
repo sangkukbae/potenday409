@@ -422,13 +422,6 @@ on:
   push:
     branches:
       - main
-      - develop
-      - 'feature/**'
-      - 'release/**'
-  pull_request:
-    branches:
-      - main
-      - develop
 
 jobs:
   build-and-test:
@@ -444,22 +437,26 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '18'
-          cache: 'pnpm'
 
-      - name: Install pnpm
-        run: npm install -g pnpm
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 9
+
+      - name: Verify pnpm Installation
+        run: pnpm --version
 
       - name: Install Dependencies
         run: pnpm install
 
       - name: Lint
-        run: pnpm --filter ${{ matrix.package }} lint
+        run: pnpm turbo run lint --filter=${{ matrix.package }}
 
       - name: Test
-        run: pnpm --filter ${{ matrix.package }} test
+        run: pnpm turbo run test --filter=${{ matrix.package }}
 
       - name: Build
-        run: pnpm --filter ${{ matrix.package }} build
+        run: pnpm turbo run build --filter=${{ matrix.package }}
 
   deploy:
     needs: build-and-test
@@ -474,8 +471,13 @@ jobs:
         with:
           node-version: '18'
 
-      - name: Install pnpm
-        run: npm install -g pnpm
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 9
+
+      - name: Verify pnpm Installation
+        run: pnpm --version
 
       - name: Install Dependencies
         run: pnpm install
@@ -484,24 +486,24 @@ jobs:
         run: pnpm build
 
       - name: Copy Files via SSH
-        uses: appleboy/scp-action@v0.1.3
+        uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.VM_HOST }}
           username: ${{ secrets.VM_USER }}
           key: ${{ secrets.VM_SSH_KEY }}
           source: '.'
-          target: '/path/to/deployment/directory'
+          target: '/home/${{ secrets.VM_USER }}/app'
+          debug: true
 
       - name: Restart PM2 Processes
-        uses: appleboy/ssh-action@v0.1.3
+        uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.VM_HOST }}
           username: ${{ secrets.VM_USER }}
           key: ${{ secrets.VM_SSH_KEY }}
           script: |
-            cd /path/to/deployment/directory
+            cd /home/${{ secrets.VM_USER }}/app
             pnpm install --prod
-            pnpm --filter backend typeorm migration:run
             pm2 reload ecosystem.config.js
 ```
 
