@@ -1,14 +1,14 @@
-import { ExecutionContext, createParamDecorator } from '@nestjs/common';
+import { createParamDecorator, ExecutionContext } from "@nestjs/common"
 
 export const SocialUser = createParamDecorator(
   (data: unknown, ctx: ExecutionContext) => {
-    const request = ctx.switchToHttp().getRequest();
-    return request.user;
-  },
-);
+    const request = ctx.switchToHttp().getRequest()
+    return request.user
+  }
+)
 
 export interface SocialUserAfterAuth {
-  email: string;
-  password: string;
-  nickname: string;
+  email: string
+  password: string
+  nickname: string
 }

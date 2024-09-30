@@ -1,10 +1,10 @@
-# My Fullstack Application
+# Soul Friends Application
 
-Welcome to **My Fullstack Application**, a robust and scalable full-stack project built using modern technologies and best practices. This monorepo leverages **TurboRepo** for efficient build management, **pnpm** for package management, and integrates a suite of tools for seamless development, testing, and deployment.
+Welcome to **Soul Friends Application**, a robust and scalable full-stack project built using modern technologies and best practices. This monorepo leverages **TurboRepo** for efficient build management, **pnpm** for package management, and integrates a suite of tools for seamless development, testing, and deployment.
 
 ## Table of Contents
 
-- [My Fullstack Application](#my-fullstack-application)
+- [Soul Friends Application](#soul-friends-application)
   - [Table of Contents](#table-of-contents)
   - [Project Overview](#project-overview)
   - [Folder Structure](#folder-structure)

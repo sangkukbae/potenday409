@@ -1,0 +1,10 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@soul-friends/config": ["packages/config"]
+    },
+    // ...other options
+  },
+  "include": ["apps", "packages"]
+}

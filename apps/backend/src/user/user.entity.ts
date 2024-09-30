@@ -1,23 +1,23 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, PrimaryGeneratedColumn } from "typeorm"
 
 @Entity() //엔티티 객체 데코레이터
 export class User {
   @PrimaryGeneratedColumn()
-  id?: number; //id는 pk이며 자동 증가하는 값
+  id?: number //id는 pk이며 자동 증가하는 값
 
   @Column({ unique: true })
-  email: string;
+  email: string
 
   @Column()
-  username: string;
+  username: string
 
   @Column({ type: "datetime", default: () => "CURRENT_TIMESTAMP" })
   //기본값 세팅
-  createdDt: Date = new Date();
+  createdDt: Date = new Date()
 
   @Column({ nullable: true })
-  providerId: string;
+  providerId: string
 
   @Column()
-  provider: string; //kakao, google
+  provider: string //kakao, google
 }

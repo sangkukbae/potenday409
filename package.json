@@ -1,5 +1,5 @@
 {
-	"name": "potenday409",
+	"name": "soul-friends",
 	"version": "1.0.0",
 	"packageManager": "pnpm@9.11.0",
 	"scripts": {
@@ -7,6 +7,7 @@
 		"build": "turbo run build",
 		"start": "turbo run start",
 		"lint": "turbo run lint",
+		"format": "turbo run format",
 		"test": "turbo run test"
 	},
 	"dependencies": {},
