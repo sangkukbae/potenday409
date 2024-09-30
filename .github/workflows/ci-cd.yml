@@ -61,9 +61,6 @@ jobs:
       - name: Verify pnpm Installation
         run: pnpm --version
 
-      - name: Install pnpm
-        run: npm install -g pnpm
-
       - name: Install Dependencies
         run: pnpm install
 
