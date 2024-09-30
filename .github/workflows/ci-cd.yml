@@ -67,6 +67,13 @@ jobs:
       - name: Build Frontend and Backend
         run: pnpm build
 
+      - name: Get changed files
+        id: changed-files
+        uses: tj-actions/changed-files@v45
+        with:
+          since_last_remote_commit: true
+          separator: ","
+
       - name: Copy Files via SSH
         uses: appleboy/scp-action@v0.1.7
         with:
@@ -84,6 +91,21 @@ jobs:
           username: ${{ secrets.VM_USER }}
           key: ${{ secrets.VM_SSH_KEY }}
           script: |
+            # Update Node.js to the required version
+            curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+            sudo apt-get install -y nodejs
+
+            # Navigate to the app directory
             cd /home/${{ secrets.VM_USER }}/app
+
+            # Install dependencies with pnpm
             pnpm install --prod
+
+            # Reload pm2 processes
             pm2 reload ecosystem.config.js
+
+            # Check if the frontend app is running and start if necessary
+            if ! pm2 list | grep -q 'frontend'; then
+              echo "Frontend not running, attempting to start..."
+              pm2 start /home/${{ secrets.VM_USER }}/app/apps/frontend/.next/standalone/server.js --name frontend
+            fi
