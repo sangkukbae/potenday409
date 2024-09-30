@@ -91,6 +91,10 @@ jobs:
           username: ${{ secrets.VM_USER }}
           key: ${{ secrets.VM_SSH_KEY }}
           script: |
+           # install Node.js v18
+            curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
+            sudo apt-get install -y nodejs
+
             # Navigate to the app directory
             cd /home/${{ secrets.VM_USER }}/app
 
