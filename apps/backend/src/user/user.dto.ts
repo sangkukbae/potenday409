@@ -1,20 +1,20 @@
 import { IsEmail, IsString } from "class-validator"
 
 export class CreateUserDto {
+  @IsString()
+  username: string
+
   @IsEmail()
   email: string
 
   @IsString()
-  password: string
+  provider_id: string
 
   @IsString()
-  username: string
+  provider: string
 }
 
 export class UpdateUserDto {
   @IsString()
   username: string
-
-  @IsString()
-  password: string
 }

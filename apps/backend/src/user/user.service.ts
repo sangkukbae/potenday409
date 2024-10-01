@@ -1,8 +1,8 @@
-import { Injectable } from "@nestjs/common"
+import { Injectable, NotFoundException } from "@nestjs/common"
 import { InjectRepository } from "@nestjs/typeorm"
 import { Repository } from "typeorm"
 
-import { CreateUserDto } from "./user.dto"
+import { CreateUserDto, UpdateUserDto } from "./user.dto"
 import { User } from "./user.entity"
 
 @Injectable()
@@ -16,24 +16,47 @@ export class UserService {
     return this.userRepository.save(user)
   }
 
-  async getUser(email: string): Promise<User> {
+  async getUserByEmail(email: string): Promise<User> {
     const result = await this.userRepository.findOne({
       where: { email },
     })
     return result
   }
 
-  async findByEmailOrSave(email, username, providerId): Promise<User> {
-    const foundUser = await this.getUser(email)
+  async getUserById(id: number): Promise<User> {
+    const result = await this.userRepository.findOne({
+      where: { id },
+    })
+    return result
+  }
+
+  async findByEmailOrSave(email, user_name, provider_id): Promise<User> {
+    const foundUser = await this.getUserByEmail(email)
     if (foundUser) {
       return foundUser
     }
 
     const newUser = await this.userRepository.save({
+      user_name,
       email,
-      username,
-      providerId,
+      provider_id,
+      provider: "google",
     })
     return newUser
+  }
+
+  async updateNickname(
+    id: number,
+    userData: UpdateUserDto
+  ): Promise<User | null> {
+    const result = await this.userRepository.update(id, {
+      user_name: userData.username,
+    })
+
+    if (result.affected > 0) {
+      return this.userRepository.findOne({ where: { id } })
+    }
+
+    throw new NotFoundException(`ID ${id}가 잘못되었습니다.`)
   }
 }

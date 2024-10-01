@@ -1,23 +1,32 @@
-import { Column, Entity, PrimaryGeneratedColumn } from "typeorm"
+import { Diary } from "@/diary/diary.entity"
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from "typeorm"
 
-@Entity() //엔티티 객체 데코레이터
+@Entity()
 export class User {
   @PrimaryGeneratedColumn()
-  id?: number //id는 pk이며 자동 증가하는 값
+  id: number
 
-  @Column({ unique: true })
+  @Column({ type: "varchar", length: 15, nullable: false, unique: true })
+  user_name: string
+
+  @Column({ type: "varchar", length: 45, nullable: false, unique: true })
   email: string
 
-  @Column()
-  username: string
+  @Column({ type: "varchar", length: 45, nullable: false, unique: true })
+  provider_id: string
 
-  @Column({ type: "datetime", default: () => "CURRENT_TIMESTAMP" })
-  //기본값 세팅
-  createdDt: Date = new Date()
+  @Column({ type: "varchar", length: 15, nullable: false })
+  provider: string
 
-  @Column({ nullable: true })
-  providerId: string
+  @CreateDateColumn({ type: "datetime", nullable: false })
+  create_dt: Date = new Date()
 
-  @Column()
-  provider: string //kakao, google
+  @OneToMany(() => Diary, (diary) => diary.user)
+  diaries: Diary[]
 }

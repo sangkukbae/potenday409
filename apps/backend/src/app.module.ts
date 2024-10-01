@@ -1,4 +1,5 @@
 import * as process from "process"
+import { Diary } from "@/diary/diary.entity"
 import { Module } from "@nestjs/common"
 import { ConfigModule } from "@nestjs/config"
 import { TypeOrmModule } from "@nestjs/typeorm"
@@ -6,13 +7,16 @@ import { TypeOrmModule } from "@nestjs/typeorm"
 import { AppController } from "./app.controller"
 import { AppService } from "./app.service"
 import { AuthModule } from "./auth/auth.module"
+import { DiaryController } from "./diary/diary.controller"
+import { DiaryModule } from "./diary/diary.module"
+import { DiaryService } from "./diary/diary.service"
 import { User } from "./user/user.entity"
 import { UserModule } from "./user/user.module"
 
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: "src/configs/.env",
+      envFilePath: "./configs/.env",
       isGlobal: true,
     }),
     TypeOrmModule.forRoot({
@@ -22,13 +26,16 @@ import { UserModule } from "./user/user.module"
       username: process.env.DB_USERNAME, // MySQL 사용자 이름
       password: process.env.DB_PASSWORD, // MySQL 비밀번호
       database: process.env.DB_NAME, // 사용할 데이터베이스 이름
-      entities: [User], // 엔티티 경로
+      entities: [User, Diary], // 엔티티 경로
       synchronize: true, // 개발 중에는 true로 설정, 프로덕션에서는 false로 설정
+      logging: true, //쿼리 로그출력
     }),
     AuthModule,
     UserModule,
+    DiaryModule,
+    TypeOrmModule.forFeature([Diary]),
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [AppController, DiaryController],
+  providers: [AppService, DiaryService],
 })
 export class AppModule {}

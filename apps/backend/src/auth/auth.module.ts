@@ -1,3 +1,5 @@
+import { GoogleStrategy } from "@/auth/google.strategy"
+import { KakaoStrategy } from "@/auth/kakao.strategy"
 import { Module } from "@nestjs/common"
 import { PassportModule } from "@nestjs/passport"
 
@@ -8,10 +10,7 @@ import { SessionSerializer } from "./session.serializer"
 
 @Module({
   imports: [UserModule, PassportModule.register({ session: true })],
-  providers: [
-    AuthService,
-    SessionSerializer /*, GoogleStrategy, KakaoStrategy*/,
-  ], //API키 입력전에 주석처리
+  providers: [AuthService, SessionSerializer, GoogleStrategy, KakaoStrategy],
   controllers: [AuthController],
 })
 export class AuthModule {}

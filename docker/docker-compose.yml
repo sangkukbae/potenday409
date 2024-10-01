@@ -1,13 +1,13 @@
 version: '3.8'
 
 services:
-  myapp_mysql:
+  soulfriends:
     image: mysql:8.0
-    container_name: myapp_mysql
+    container_name: soulfriends_mysql
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: myapp_db
+      MYSQL_DATABASE: soulfriends
       MYSQL_USER: myapp_user
       MYSQL_PASSWORD: myapp_password
     ports:

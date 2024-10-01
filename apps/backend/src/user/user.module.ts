@@ -1,3 +1,4 @@
+import { Diary } from "@/diary/diary.entity"
 import { Module } from "@nestjs/common"
 import { TypeOrmModule } from "@nestjs/typeorm"
 

@@ -16,7 +16,7 @@ export class AuthService {
 
   async register(userDto: CreateUserDto) {
     // 이미 가입된 유저가 있는지 체크
-    const user = await this.userService.getUser(userDto.email)
+    const user = await this.userService.getUserByEmail(userDto.email)
     if (user) {
       throw new HttpException(
         "해당 유저가 이미 있습니다.",
