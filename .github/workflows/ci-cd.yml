@@ -112,12 +112,18 @@ jobs:
           script: |
             set -e
 
-            # Update Node.js if necessary
-            if ! node -v | grep -q 'v${{ env.NODE_VERSION }}'; then
-              echo "Updating Node.js to v${{ env.NODE_VERSION }}..."
-              curl -fsSL https://deb.nodesource.com/setup_${{ env.NODE_VERSION }}.x | sudo -E bash -
-              sudo apt-get install -y nodejs
-            fi
+            # Install nvm
+            curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash
+
+            # Load nvm
+            export NVM_DIR="$HOME/.nvm"
+            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+
+            # Install the desired Node.js version
+            nvm install ${{ env.NODE_VERSION }}
+
+            # Use the installed Node.js version
+            nvm use ${{ env.NODE_VERSION }}
 
             # Install or update pnpm
             sudo npm install -g pnpm@${{ env.PNPM_VERSION }}
