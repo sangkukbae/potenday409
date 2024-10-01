@@ -102,6 +102,16 @@ jobs:
         with:
           path: artifacts
 
+      - name: Upload Artifacts to VM
+        uses: appleboy/scp-action@v0.1.0
+        with:
+          host: ${{ secrets.VM_HOST }}
+          username: ${{ secrets.VM_USER }}
+          key: ${{ secrets.VM_SSH_KEY }}
+          port: 22
+          source: "artifacts/*"
+          target: "/home/${{ secrets.VM_USER }}/app"
+
       - name: Deploy to VM
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -112,32 +122,40 @@ jobs:
           script: |
             set -e
 
-            # Install nvm
-            curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash
+            # Install NVM if not already installed
+            if [ ! -d "$HOME/.nvm" ]; then
+              echo "Installing NVM..."
+              curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash
+            fi
 
-            # Load nvm
+            # Load NVM
             export NVM_DIR="$HOME/.nvm"
             [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
 
-            # Install the desired Node.js version
-            nvm install ${{ env.NODE_VERSION }}
+            # Install the desired Node.js version if not already installed
+            if ! nvm ls ${{ env.NODE_VERSION }} | grep -q "${{ env.NODE_VERSION }}"; then
+              echo "Installing Node.js v${{ env.NODE_VERSION }}..."
+              nvm install ${{ env.NODE_VERSION }}
+            fi
 
-            # Use the installed Node.js version
+            # Use the specified Node.js version
             nvm use ${{ env.NODE_VERSION }}
+            node -v
+            npm -v
 
-            # Install or update pnpm
-            sudo npm install -g pnpm@${{ env.PNPM_VERSION }}
+            # Install or update pnpm without sudo
+            echo "Installing pnpm v${{ env.PNPM_VERSION }}..."
+            npm install -g pnpm@${{ env.PNPM_VERSION }}
 
             # Navigate to the app directory
             cd /home/${{ secrets.VM_USER }}/app
 
-            # Copy new files
-            scp -r ${{ github.workspace }}/artifacts/* .
-
             # Install production dependencies
+            echo "Installing production dependencies with pnpm..."
             pnpm install --prod --frozen-lockfile
 
             # Reload PM2 processes
+            echo "Reloading PM2 processes..."
             pm2 reload ecosystem.config.js || pm2 start ecosystem.config.js
 
             # Ensure frontend is running
@@ -145,9 +163,6 @@ jobs:
               echo "Frontend not running, starting..."
               pm2 start apps/frontend/.next/standalone/server.js --name frontend
             fi
-
-            # Clean up old backups (keep last 5)
-            cd backups && ls -t | tail -n +6 | xargs -I {} rm -- {}
 
       - name: Post Deployment Cleanup
         if: always()
