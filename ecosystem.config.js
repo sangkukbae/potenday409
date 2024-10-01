@@ -11,7 +11,7 @@ module.exports = {
 		},
 		{
 			name: 'frontend',
-			script: 'apps/frontend/.next/standalone/server.js',
+			script: 'apps/frontend/.next/standalone/apps/frontend/server.js',
 			instances: 'max',
 			exec_mode: 'cluster',
 			env: {

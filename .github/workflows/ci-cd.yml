@@ -5,7 +5,42 @@ on:
     branches:
       - main
 
+env:
+  NODE_VERSION: '18'
+  PNPM_VERSION: '9'
+
 jobs:
+  setup:
+    runs-on: ubuntu-latest
+    outputs:
+      pnpm-cache: ${{ steps.cache-pnpm.outputs.cache-hit }}
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: 'pnpm'
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: ${{ env.PNPM_VERSION }}
+
+      - name: Cache pnpm Store
+        id: cache-pnpm
+        uses: actions/cache@v3
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Verify pnpm Installation
+        run: pnpm --version
+
   build-and-test:
     runs-on: ubuntu-latest
     strategy:
@@ -15,21 +50,26 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
 
+      - name: Restore pnpm Store
+        uses: actions/cache@v3
+        with:
+          path: ~/.pnpm-store
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: ${{ env.NODE_VERSION }}
 
       - name: Setup pnpm
         uses: pnpm/action-setup@v2
         with:
-          version: 9
-
-      - name: Verify pnpm Installation
-        run: pnpm --version
+          version: ${{ env.PNPM_VERSION }}
 
       - name: Install Dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
 
       - name: Lint
         run: pnpm turbo run lint --filter=${{ matrix.package }}
@@ -40,72 +80,76 @@ jobs:
       - name: Build
         run: pnpm turbo run build --filter=${{ matrix.package }}
 
+      - name: Upload Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ matrix.package }}-build
+          path: apps/${{ matrix.package }}/dist
+          retention-days: 1
+
   deploy:
     needs: build-and-test
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
+    concurrency:
+      group: deploy
+      cancel-in-progress: true
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v3
+      - name: Download Artifacts
+        uses: actions/download-artifact@v3
         with:
-          node-version: '18'
+          path: artifacts
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
-        with:
-          version: 9
-
-      - name: Verify pnpm Installation
-        run: pnpm --version
-
-      - name: Install Dependencies
-        run: pnpm install
-
-      - name: Build Frontend and Backend
-        run: pnpm build
-
-      - name: Get changed files
-        id: changed-files
-        uses: tj-actions/changed-files@v45
-        with:
-          since_last_remote_commit: true
-          separator: ","
-
-      - name: Copy Files via SSH
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.VM_HOST }}
-          username: ${{ secrets.VM_USER }}
-          key: ${{ secrets.VM_SSH_KEY }}
-          source: '.'
-          target: '/home/${{ secrets.VM_USER }}/app'
-          debug: true
-
-      - name: Restart PM2 Processes
+      - name: Deploy to VM
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.VM_HOST }}
           username: ${{ secrets.VM_USER }}
           key: ${{ secrets.VM_SSH_KEY }}
+          port: 22
           script: |
-           # install Node.js v18
-            curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
-            sudo apt-get install -y nodejs
+            set -e
+
+            # Update Node.js if necessary
+            if ! node -v | grep -q 'v${{ env.NODE_VERSION }}'; then
+              echo "Updating Node.js to v${{ env.NODE_VERSION }}..."
+              curl -fsSL https://deb.nodesource.com/setup_${{ env.NODE_VERSION }}.x | sudo -E bash -
+              sudo apt-get install -y nodejs
+            fi
+
+            # Install or update pnpm
+            sudo npm install -g pnpm@${{ env.PNPM_VERSION }}
 
             # Navigate to the app directory
             cd /home/${{ secrets.VM_USER }}/app
 
-            # Install dependencies with pnpm
-            pnpm install --prod
+            # Copy new files
+            scp -r ${{ github.workspace }}/artifacts/* .
 
-            # Reload pm2 processes
-            pm2 reload ecosystem.config.js
+            # Install production dependencies
+            pnpm install --prod --frozen-lockfile
 
-            # Check if the frontend app is running and start if necessary
+            # Reload PM2 processes
+            pm2 reload ecosystem.config.js || pm2 start ecosystem.config.js
+
+            # Ensure frontend is running
             if ! pm2 list | grep -q 'frontend'; then
-              echo "Frontend not running, attempting to start..."
-              pm2 start /home/${{ secrets.VM_USER }}/app/apps/frontend/.next/standalone/server.js --name frontend
+              echo "Frontend not running, starting..."
+              pm2 start apps/frontend/.next/standalone/server.js --name frontend
             fi
+
+            # Clean up old backups (keep last 5)
+            cd backups && ls -t | tail -n +6 | xargs -I {} rm -- {}
+
+      - name: Post Deployment Cleanup
+        if: always()
+        run: |
+          if [ "${{ job.status }}" == "success" ]; then
+            echo "Deployment successful!"
+          else
+            echo "Deployment failed. Rolling back..."
+            # Add rollback logic here if needed
+          fi
