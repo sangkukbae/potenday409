@@ -14,7 +14,7 @@ export class AuthController {
   constructor(private readonly authService: AuthService) {}
   @Get("to-google") // 구글 로그인으로 이동하는 라우터 메서드
   @UseGuards(GoogleAuthGuard)
-  async googleAuth(@Request() req: Request) {}
+  async googleAuth() {}
 
   @Get("google") //구글 로그인 후 콜백 실행 후 콜백 실행 후 이동 시 실행되는 라이터 메서드
   @UseGuards(GoogleAuthGuard)
@@ -26,7 +26,7 @@ export class AuthController {
 
   @UseGuards(KakaoAuthGuard)
   @Get("to-kakao")
-  async kakaoAuth(@Request() req, @Response() res) {}
+  async kakaoAuth() {}
 
   @Get("kakao") //구글 로그인 후 콜백 실행 후 콜백 실행 후 이동 시 실행되는 라이터 메서드
   @UseGuards(KakaoAuthGuard)

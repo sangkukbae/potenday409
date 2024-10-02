@@ -2,10 +2,8 @@ import * as process from "process"
 import { JwtPayload } from "@/auth/auth.controller"
 import { User } from "@/user/user.entity" // User 엔티티를 임포트
 
-import { UserService } from "@/user/user.service"
 import { Injectable, UnauthorizedException } from "@nestjs/common"
 import { JwtService } from "@nestjs/jwt"
-import axios from "axios"
 
 @Injectable()
 export class AuthService {
@@ -36,7 +34,7 @@ export class AuthService {
       })
       return decoded // 유효한 경우, 디코딩된 페이로드 반환
     } catch (error) {
-      throw new UnauthorizedException("Invalid token")
+      throw new UnauthorizedException(error)
     }
   }
 }
