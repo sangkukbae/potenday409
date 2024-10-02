@@ -8,13 +8,8 @@ import { User } from "./user.entity"
 @Injectable()
 export class UserService {
   constructor(
-    //레포지토리 주입
     @InjectRepository(User) private userRepository: Repository<User>
   ) {}
-
-  createUser(user: CreateUserDto): Promise<User> {
-    return this.userRepository.save(user)
-  }
 
   async getUserByEmail(email: string): Promise<User> {
     const result = await this.userRepository.findOne({
@@ -36,13 +31,12 @@ export class UserService {
       return foundUser
     }
 
-    const newUser = await this.userRepository.save({
+    return await this.userRepository.save({
       user_name,
       email,
       provider_id,
       provider: "google",
     })
-    return newUser
   }
 
   async updateNickname(

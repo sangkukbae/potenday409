@@ -3,6 +3,12 @@ import { Controller, Get, Request, Response, UseGuards } from "@nestjs/common"
 import { GoogleAuthGuard, KakaoAuthGuard } from "./auth.guard"
 import { AuthService } from "./auth.service"
 
+export interface JwtPayload {
+  id: number
+  user_name: string
+  email: string
+}
+
 @Controller("auth")
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
@@ -14,13 +20,8 @@ export class AuthController {
   @UseGuards(GoogleAuthGuard)
   async googleAuthRedirect(@Request() req, @Response() res) {
     const { user } = req
-    if (!user) {
-      return res.status(400).send({ message: "구글 유저 정보가 없습니다." })
-    }
-    return res.send({
-      user,
-      message: "success",
-    })
+    const accessToken = await this.authService.googleLogin(user)
+    return res.send({ access_token: accessToken })
   }
 
   @UseGuards(KakaoAuthGuard)
@@ -31,12 +32,7 @@ export class AuthController {
   @UseGuards(KakaoAuthGuard)
   async kakaoAuthRedirect(@Request() req, @Response() res) {
     const { user } = req
-    if (!user) {
-      return res.status(400).send({ message: "카카오 유저정보가 없습니다." })
-    }
-    return res.send({
-      user,
-      message: "success",
-    })
+    const accessToken = await this.authService.kakaoLogin(user)
+    return res.send({ access_token: accessToken })
   }
 }

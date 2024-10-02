@@ -1,5 +1,14 @@
+import { JwtGuard } from "@/auth/auth.guard"
 import { UpdateUserDto } from "@/user/user.dto"
-import { Body, Controller, Param, Put } from "@nestjs/common"
+import {
+  Body,
+  Controller,
+  Get,
+  Param,
+  Put,
+  Request,
+  UseGuards,
+} from "@nestjs/common"
 
 import { UserService } from "./user.service"
 
@@ -10,5 +19,11 @@ export class UserController {
   @Put("nickname/:id")
   updateNickname(@Param("id") id: number, @Body() userData: UpdateUserDto) {
     return this.userService.updateNickname(id, userData)
+  }
+
+  @Get("info")
+  @UseGuards(JwtGuard)
+  getUserInfo(@Request() req) {
+    return req.user
   }
 }

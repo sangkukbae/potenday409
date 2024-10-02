@@ -20,3 +20,9 @@ export class KakaoAuthGuard extends AuthGuard("kakao") {
     return result
   }
 }
+
+export class JwtGuard extends AuthGuard("jwt") {
+  async canActivate(context: ExecutionContext): Promise<boolean> {
+    return (await super.canActivate(context)) as boolean
+  }
+}
