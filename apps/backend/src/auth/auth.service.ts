@@ -29,9 +29,7 @@ export class AuthService {
     }
 
     const accessToken = this.generateAccessToken(payload)
-
     const refreshToken = this.generateRefreshToken(payload)
-
     await this.userService.setRefreshToken(user.id, refreshToken)
 
     return {
@@ -63,12 +61,6 @@ export class AuthService {
       throw new UnauthorizedException("Invalid refresh token")
     }
 
-    const payload: JwtPayload = {
-      id: user.id,
-      email: user.email,
-      user_name: user.user_name,
-    }
-
-    return { accessToken: this.generateAccessToken(payload) }
+    return await this.generateTokens(user)
   }
 }

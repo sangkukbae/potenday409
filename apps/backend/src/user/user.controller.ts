@@ -5,6 +5,7 @@ import {
   Body,
   Controller,
   Get,
+  Headers,
   Param,
   Post,
   Put,
@@ -34,7 +35,8 @@ export class UserController {
 
   @Post("token-refresh")
   @UseGuards(JwtGuard)
-  async postTokenRefresh(@Body("refresh_token") refresh_token: string) {
+  async postTokenRefresh(@Headers("authorization") authorization: string) {
+    const refresh_token = authorization.replace("Bearer ", "")
     return this.authService.refreshAccessToken(refresh_token)
   }
 }
