@@ -1,5 +1,4 @@
 import * as process from "process"
-import { AuthService } from "@/auth/auth.service" // AuthService를 임포트합니다.
 import { User } from "@/user/user.entity"
 import { UserService } from "@/user/user.service"
 import { Injectable } from "@nestjs/common"
@@ -8,10 +7,7 @@ import { Profile, Strategy } from "passport-kakao"
 
 @Injectable()
 export class KakaoStrategy extends PassportStrategy(Strategy, "kakao") {
-  constructor(
-    private readonly userService: UserService,
-    private readonly authService: AuthService
-  ) {
+  constructor(private readonly userService: UserService) {
     super({
       clientID: process.env.KAKAO_API_KEY,
       callbackURL: process.env.KAKAO_CALLBACK_URL,
@@ -36,7 +32,8 @@ export class KakaoStrategy extends PassportStrategy(Strategy, "kakao") {
     const user: User = await this.userService.findByEmailOrSave(
       email,
       username,
-      providerId
+      providerId,
+      "kakao"
     )
 
     return user

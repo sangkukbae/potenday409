@@ -30,7 +30,8 @@ export class GoogleStrategy extends PassportStrategy(Strategy) {
     const user: User = await this.userService.findByEmailOrSave(
       email,
       name.familyName + name.givenName,
-      providerId
+      providerId,
+      "google"
     )
     return user
   }
