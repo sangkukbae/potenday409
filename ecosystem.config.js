@@ -3,8 +3,8 @@ module.exports = {
 		{
 			name: 'backend',
 			script: 'apps/backend/dist/main.js',
-			instances: 'max',
-			exec_mode: 'cluster',
+			instances: 1,  // Single instance
+			exec_mode: 'fork',  // Fork mode for single instance
 			env: {
 				NODE_ENV: 'production',
 			},
@@ -12,8 +12,8 @@ module.exports = {
 		{
 			name: 'frontend',
 			script: 'apps/frontend/.next/standalone/apps/frontend/server.js',
-			instances: 'max',
-			exec_mode: 'cluster',
+			instances: 1,  // Single instance
+			exec_mode: 'fork',  // Fork mode for single instance
 			env: {
 				NODE_ENV: 'production',
 			},
