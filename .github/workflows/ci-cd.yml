@@ -8,6 +8,7 @@ on:
 env:
   NODE_VERSION: '18'
   PNPM_VERSION: '9'
+  REPO_NAME: ${{ github.event.repository.name }}
 
 jobs:
   setup:
@@ -79,13 +80,6 @@ jobs:
       - name: Build
         run: pnpm turbo run build --filter=${{ matrix.package }}
 
-      - name: Upload Artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: ${{ matrix.package }}-build
-          path: apps/${{ matrix.package }}/dist
-          retention-days: 1
-
   deploy:
     needs: build-and-test
     runs-on: ubuntu-latest
@@ -97,21 +91,6 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      - name: Download Artifacts
-        uses: actions/download-artifact@v3
-        with:
-          path: artifacts
-
-      - name: Upload Artifacts to VM
-        uses: appleboy/scp-action@v0.1.0
-        with:
-          host: ${{ secrets.VM_HOST }}
-          username: ${{ secrets.VM_USER }}
-          key: ${{ secrets.VM_SSH_KEY }}
-          port: 22
-          source: "artifacts/*"
-          target: "/home/${{ secrets.VM_USER }}/app"
-
       - name: Deploy to VM
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -122,47 +101,19 @@ jobs:
           script: |
             set -e
 
-            # Install NVM if not already installed
-            if [ ! -d "$HOME/.nvm" ]; then
-              echo "Installing NVM..."
-              curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash
-            fi
+            # Navigate to the app directory named after the repo
+            cd /home/${{ secrets.VM_USER }}/app/${{ env.REPO_NAME }}
 
-            # Load NVM
-            export NVM_DIR="$HOME/.nvm"
-            [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+            # Pull the latest code from the main branch
+            git checkout main
+            git pull origin main
 
-            # Install the desired Node.js version if not already installed
-            if ! nvm ls ${{ env.NODE_VERSION }} | grep -q "${{ env.NODE_VERSION }}"; then
-              echo "Installing Node.js v${{ env.NODE_VERSION }}..."
-              nvm install ${{ env.NODE_VERSION }}
-            fi
-
-            # Use the specified Node.js version
-            nvm use ${{ env.NODE_VERSION }}
-            node -v
-            npm -v
-
-            # Install or update pnpm without sudo
-            echo "Installing pnpm v${{ env.PNPM_VERSION }}..."
-            npm install -g pnpm@${{ env.PNPM_VERSION }}
-
-            # Navigate to the app directory
-            cd /home/${{ secrets.VM_USER }}/app
-
-            # Install production dependencies
-            echo "Installing production dependencies with pnpm..."
-            pnpm install --prod --frozen-lockfile
+            # Install dependencies and build the project
+            pnpm install
+            pnpm build
 
             # Reload PM2 processes
-            echo "Reloading PM2 processes..."
             pm2 reload ecosystem.config.js || pm2 start ecosystem.config.js
-
-            # Ensure frontend is running
-            if ! pm2 list | grep -q 'frontend'; then
-              echo "Frontend not running, starting..."
-              pm2 start apps/frontend/.next/standalone/server.js --name frontend
-            fi
 
       - name: Post Deployment Cleanup
         if: always()
