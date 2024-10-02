@@ -1,4 +1,3 @@
-import { join } from "path"
 import * as process from "process"
 import { ValidationPipe } from "@nestjs/common"
 import { NestFactory } from "@nestjs/core"
@@ -22,9 +21,6 @@ async function bootstrap() {
   //passport 초기화 및 세션 저장소 초기화
   app.use(passport.initialize())
   app.use(passport.session())
-  app.useStaticAssets(join(__dirname, "..", "static"))
-  app.useStaticAssets(join(__dirname, "..", "public"))
-  app.setBaseViewsDir(join(__dirname, "..", "views"))
   await app.listen(process.env.PORT, () => {})
 }
 bootstrap()

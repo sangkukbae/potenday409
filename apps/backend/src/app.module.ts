@@ -1,5 +1,9 @@
 import * as process from "process"
 import { Diary } from "@/diary/diary.entity"
+import { YoutubeController } from "@/youtube/youtube.controller"
+import { YoutubeModule } from "@/youtube/youtube.module"
+import { YoutubeService } from "@/youtube/youtube.service"
+import { HttpModule, HttpService } from "@nestjs/axios"
 import { Module } from "@nestjs/common"
 import { ConfigModule } from "@nestjs/config"
 import { TypeOrmModule } from "@nestjs/typeorm"
@@ -16,7 +20,7 @@ import { UserModule } from "./user/user.module"
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: "./configs/.env",
+      envFilePath: "src/configs/.env",
       isGlobal: true,
     }),
     TypeOrmModule.forRoot({
@@ -30,12 +34,14 @@ import { UserModule } from "./user/user.module"
       synchronize: true, // 개발 중에는 true로 설정, 프로덕션에서는 false로 설정
       logging: true, //쿼리 로그출력
     }),
+    TypeOrmModule.forFeature([Diary]),
     AuthModule,
     UserModule,
     DiaryModule,
-    TypeOrmModule.forFeature([Diary]),
+    YoutubeModule,
+    HttpModule,
   ],
-  controllers: [AppController, DiaryController],
-  providers: [AppService, DiaryService],
+  controllers: [AppController, DiaryController, YoutubeController],
+  providers: [AppService, DiaryService, YoutubeService],
 })
 export class AppModule {}

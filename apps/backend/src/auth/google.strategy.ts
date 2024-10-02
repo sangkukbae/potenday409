@@ -1,10 +1,9 @@
 import * as process from "process"
+import { UserService } from "@/user/user.service"
 import { Injectable } from "@nestjs/common"
 import { PassportStrategy } from "@nestjs/passport"
 import { Strategy } from "passport-google-oauth20"
 import { User } from "src/user/user.entity"
-
-import { UserService } from "../user/user.service"
 
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy) {

@@ -1,9 +1,9 @@
 import { GoogleStrategy } from "@/auth/google.strategy"
 import { KakaoStrategy } from "@/auth/kakao.strategy"
+import { UserModule } from "@/user/user.module"
 import { Module } from "@nestjs/common"
 import { PassportModule } from "@nestjs/passport"
 
-import { UserModule } from "../user/user.module"
 import { AuthController } from "./auth.controller"
 import { AuthService } from "./auth.service"
 import { SessionSerializer } from "./session.serializer"
