@@ -27,6 +27,9 @@ export class User {
   @CreateDateColumn({ type: "datetime", nullable: false })
   create_dt: Date = new Date()
 
+  @Column({ type: "text", nullable: true })
+  refresh_token: string
+
   @OneToMany(() => Diary, (diary) => diary.user)
   diaries: Diary[]
 }

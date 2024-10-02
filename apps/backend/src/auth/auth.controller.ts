@@ -20,8 +20,9 @@ export class AuthController {
   @UseGuards(GoogleAuthGuard)
   async googleAuthRedirect(@Request() req, @Response() res) {
     const { user } = req
-    const accessToken = await this.authService.googleLogin(user)
-    return res.send({ access_token: accessToken })
+    const { accessToken, refreshToken } =
+      await this.authService.googleLogin(user)
+    return res.send({ access_token: accessToken, refresh_token: refreshToken })
   }
 
   @UseGuards(KakaoAuthGuard)
@@ -32,7 +33,8 @@ export class AuthController {
   @UseGuards(KakaoAuthGuard)
   async kakaoAuthRedirect(@Request() req, @Response() res) {
     const { user } = req
-    const accessToken = await this.authService.kakaoLogin(user)
-    return res.send({ access_token: accessToken })
+    const { accessToken, refreshToken } =
+      await this.authService.kakaoLogin(user)
+    return res.send({ access_token: accessToken, refresh_token: refreshToken })
   }
 }

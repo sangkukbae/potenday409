@@ -1,4 +1,3 @@
-import * as process from "process"
 import { GoogleStrategy } from "@/auth/google.strategy"
 import { JwtStrategy } from "@/auth/jwt.strategy"
 import { KakaoStrategy } from "@/auth/kakao.strategy"
@@ -14,10 +13,7 @@ import { AuthService } from "./auth.service"
   imports: [
     UserModule,
     PassportModule.register({ session: false }),
-    JwtModule.register({
-      secret: process.env.JWT_SECRET,
-      signOptions: { expiresIn: "1d" },
-    }),
+    JwtModule.register({}),
   ],
   providers: [AuthService, GoogleStrategy, KakaoStrategy, JwtStrategy],
   controllers: [AuthController],
