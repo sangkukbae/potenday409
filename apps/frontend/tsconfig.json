@@ -13,10 +13,9 @@
     "jsx": "preserve",
     "incremental": true,
     "plugins": [{ "name": "next" }],
+    "baseUrl": "./",
     "paths": {
-      "@/*": ["./src/*"],
-      "@/shared": ["../../packages/shared/src/*"],
-      "@/config": ["../../packages/config/src/*"]
+      "@/*": ["./*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
