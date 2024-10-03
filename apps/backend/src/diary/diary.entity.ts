@@ -23,7 +23,7 @@ export class Diary {
   character: string
 
   @Column({ type: "mediumtext", nullable: false })
-  context: string
+  content: string
 
   @Column({ type: "varchar", length: 45, nullable: true })
   music_url: string
@@ -32,7 +32,7 @@ export class Diary {
   emotion: string
 
   @Column({ type: "mediumtext", nullable: true })
-  reply_context: string
+  reply_content: string
 
   @Column({ type: "int", nullable: true, default: 0 })
   heart: number // 0 : 없음, 1:있음

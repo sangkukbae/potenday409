@@ -8,7 +8,7 @@ export class CreateDiaryDto {
   title: string
 
   @IsNotEmpty()
-  context: string
+  content: string
 
   @IsNotEmpty()
   character: string
@@ -16,7 +16,7 @@ export class CreateDiaryDto {
 
 export class UpdateDiaryDto {
   @IsNotEmpty()
-  context: string
+  content: string
 
   @IsNotEmpty()
   heart: number

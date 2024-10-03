@@ -13,7 +13,6 @@ export class UserService {
 
   async createUser(createUserDto: CreateUserDto): Promise<User> {
     return await this.userRepository.save({
-      user_name: createUserDto.user_name,
       email: createUserDto.email,
       provider_id: createUserDto.provider_id,
       provider: createUserDto.provider,
@@ -34,19 +33,13 @@ export class UserService {
     return result
   }
 
-  async findByEmailOrSave(
-    email,
-    user_name,
-    provider_id,
-    provider
-  ): Promise<User> {
+  async findByEmailOrSave(email, provider_id, provider): Promise<User> {
     const foundUser = await this.getUserByEmail(email)
     if (foundUser) {
       return foundUser
     }
 
     return await this.createUser({
-      user_name,
       email,
       provider_id,
       provider,

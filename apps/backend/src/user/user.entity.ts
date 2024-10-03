@@ -12,7 +12,13 @@ export class User {
   @PrimaryGeneratedColumn()
   id: number
 
-  @Column({ type: "varchar", length: 15, nullable: false, unique: true })
+  @Column({
+    type: "varchar",
+    length: 15,
+    nullable: true,
+    unique: true,
+    default: () => "",
+  })
   user_name: string
 
   @Column({ type: "varchar", length: 45, nullable: false, unique: true })

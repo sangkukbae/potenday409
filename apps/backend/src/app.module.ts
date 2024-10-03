@@ -11,6 +11,7 @@ import { TypeOrmModule } from "@nestjs/typeorm"
 import { AppController } from "./app.controller"
 import { AppService } from "./app.service"
 import { AuthModule } from "./auth/auth.module"
+import { ClovaModule } from "./clova/clova.module"
 import { DiaryController } from "./diary/diary.controller"
 import { DiaryModule } from "./diary/diary.module"
 import { DiaryService } from "./diary/diary.service"
@@ -40,6 +41,7 @@ import { UserModule } from "./user/user.module"
     DiaryModule,
     YoutubeModule,
     HttpModule,
+    ClovaModule,
   ],
   controllers: [AppController, DiaryController, YoutubeController],
   providers: [AppService, DiaryService, YoutubeService],

@@ -19,7 +19,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(accessToken: string, refreshToken: string, profile: any) {
-    const { id, name, emails } = profile
+    const { id, emails } = profile
     console.log("accessToken : " + accessToken)
     console.log("refreshToken : " + refreshToken)
 
@@ -29,7 +29,6 @@ export class GoogleStrategy extends PassportStrategy(Strategy) {
     // 유저 정보 저장 혹은 가져오기
     const user: User = await this.userService.findByEmailOrSave(
       email,
-      name.familyName + name.givenName,
       providerId,
       "google"
     )
