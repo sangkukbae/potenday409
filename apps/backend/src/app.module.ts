@@ -26,14 +26,14 @@ import { UserModule } from "./user/user.module"
     }),
     TypeOrmModule.forRoot({
       type: "mysql",
-      host: process.env.DB_HOST, // MySQL 호스트
-      port: Number(process.env.DB_PORT), // 기본 MySQL 포트
-      username: process.env.DB_USERNAME, // MySQL 사용자 이름
-      password: process.env.DB_PASSWORD, // MySQL 비밀번호
-      database: process.env.DB_NAME, // 사용할 데이터베이스 이름
-      entities: [User, Diary], // 엔티티 경로
+      host: process.env.DB_HOST,
+      port: Number(process.env.DB_PORT),
+      username: process.env.DB_USERNAME,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DB_NAME,
+      entities: [User, Diary],
       synchronize: true, // 개발 중에는 true로 설정, 프로덕션에서는 false로 설정
-      logging: true, //쿼리 로그출력
+      logging: true,
     }),
     TypeOrmModule.forFeature([Diary]),
     AuthModule,
