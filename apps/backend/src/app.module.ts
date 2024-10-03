@@ -21,7 +21,7 @@ import { UserModule } from "./user/user.module"
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: "src/configs/.env",
+      envFilePath: [".env", "../src/configs/.env"],
       isGlobal: true,
     }),
     TypeOrmModule.forRoot({

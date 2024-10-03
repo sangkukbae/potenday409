@@ -17,7 +17,6 @@ export class User {
     length: 15,
     nullable: true,
     unique: true,
-    default: () => "",
   })
   user_name: string
 
