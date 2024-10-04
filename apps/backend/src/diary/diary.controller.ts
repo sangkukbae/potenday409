@@ -51,4 +51,9 @@ export class DiaryController {
   ) {
     return this.diaryService.findMultiple({ userId, year, month })
   }
+
+  @Patch()
+  updateDiaryHeart(@Param("id") id: number, @Query("heart") heart: number) {
+    return this.diaryService.updateDiaryHeart(id, heart)
+  }
 }

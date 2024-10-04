@@ -19,7 +19,7 @@ export class DiaryService {
   async createDiary(diaryData: CreateDiaryDto) {
     const user = await this.userService.getUserById(diaryData.user_id)
     const diary = this.diaryRepository.create({ ...diaryData, user })
-    const { reply_content, music_url, emotion } =
+    const { reply_content, music_url, emotion, music_name } =
       await this.clovaService.generateResponse(
         diaryData.title,
         diaryData.character,
@@ -30,6 +30,7 @@ export class DiaryService {
       reply_content,
       music_url,
       emotion,
+      music_name,
     })
   }
 
@@ -46,7 +47,7 @@ export class DiaryService {
 
   async updateDiary(id: number, updateData: UpdateDiaryDto) {
     const diary = await this.getDiary(id)
-    const { reply_content, music_url, emotion } =
+    const { reply_content, music_url, emotion, music_name } =
       await this.clovaService.generateResponse(
         diary.title,
         diary.character,
@@ -57,9 +58,14 @@ export class DiaryService {
       reply_content,
       music_url,
       emotion,
+      music_name,
     })
 
     return this.getDiary(id)
+  }
+
+  async updateDiaryHeart(id: number, heart: number) {
+    await this.diaryRepository.update(id, { heart })
   }
 
   deleteDiary(id: number) {

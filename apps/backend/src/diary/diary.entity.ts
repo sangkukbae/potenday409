@@ -42,4 +42,7 @@ export class Diary {
 
   @UpdateDateColumn({ type: "datetime", nullable: true })
   update_dt: Date
+
+  @Column({ type: "varchar", length: 45, nullable: true })
+  music_name: string
 }
