@@ -1,16 +1,15 @@
 "use client"
 
 import * as React from "react"
-
+import Image from "next/image"
 import { ChevronLeftIcon, ChevronRightIcon } from "@radix-ui/react-icons"
+import { isSameDay } from "date-fns"
 import { DayPicker, useDayRender } from "react-day-picker"
 
-import Image from "next/image"
-import PlusOffIcon from "@/assets/icons/ico_plus_off.svg"
-import PlusOnIcon from "@/assets/icons/ico_plus_on.svg"
-import { buttonVariants } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
-import { isSameDay } from "date-fns"
+import { buttonVariants } from "@/components/ui/button"
+import PlusOffIcon from "@/app/assets/icons/ico_plus_off.svg"
+import PlusOnIcon from "@/app/assets/icons/ico_plus_on.svg"
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker>
 
