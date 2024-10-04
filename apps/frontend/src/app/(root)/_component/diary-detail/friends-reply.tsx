@@ -1,5 +1,6 @@
 import { Icons } from "@/components/ui/icons"
 import Image from "next/image"
+import YoutubeImg from "@/assets/images/youtube.png"
 
 export const FriendsReply = () => {
   const isLoading = false
@@ -26,7 +27,7 @@ const Reply = () => {
       </p>
 
       <div className="w-full p-[10px] rounded-[8px] bg-white border border-[#dddddd] flex items-center gap-x-3 ">
-        <Image src="/images/youtube.png" width={24} height={16} alt="youtube" />
+        <Image src={YoutubeImg} width={24} height={16} alt="youtube" />
         <span className="text-sm leading-[150%] tracking-[-0.02em] text-[#333333]">
           NewJeans - Bubble Gum
         </span>
