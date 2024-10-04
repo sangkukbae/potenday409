@@ -5,6 +5,9 @@ import * as React from "react"
 import { ChevronLeftIcon, ChevronRightIcon } from "@radix-ui/react-icons"
 import { DayPicker, useDayRender } from "react-day-picker"
 
+import Image from "next/image"
+import PlusOffIcon from "@/assets/icons/ico_plus_off.svg"
+import PlusOnIcon from "@/assets/icons/ico_plus_on.svg"
 import { buttonVariants } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { isSameDay } from "date-fns"
@@ -88,20 +91,29 @@ function Calendar({
                   outside ? "invisible" : "visible",
                   {
                     "border border-dashed": !disabled, //&& !hasDiary
-                  },
-                  {
-                    'bg-[url("/icons/ico_plus_on.svg")] bg-no-repeat bg-center ]':
-                      !disabled && isSameDay(date, selectedDays as Date),
-                  },
-                  {
-                    'bg-[url("/icons/ico_plus_off.svg")] bg-no-repeat bg-center ]':
-                      !disabled && !isSameDay(date, selectedDays as Date),
                   }
                 )}
                 ref={buttonRef}
                 type="button"
               >
-                {/* <Icons.happy className="absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 size-10" /> */}
+                {!disabled && isSameDay(date, selectedDays as Date) && (
+                  <Image
+                    className="absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
+                    src={PlusOnIcon.src}
+                    width={12}
+                    height={12}
+                    alt="plus on"
+                  />
+                )}
+                {!disabled && !isSameDay(date, selectedDays as Date) && (
+                  <Image
+                    className="absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
+                    src={PlusOffIcon.src}
+                    width={12}
+                    height={12}
+                    alt="plus off"
+                  />
+                )}
               </button>
 
               <span
