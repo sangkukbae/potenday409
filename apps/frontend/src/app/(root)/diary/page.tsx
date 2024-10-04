@@ -3,14 +3,17 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 import { Calendar } from "@/components/ui/calendar"
+import { EmotionFriendButton } from "@/components/emotion-friend-button"
 import { Icons } from "@/components/ui/icons"
 import { ko } from "date-fns/locale"
+import { useRouter } from "next/navigation"
 import { useState } from "react"
 
 export default function DiaryPage() {
   const [date, setDate] = useState<Date | undefined>(new Date())
+  const router = useRouter()
 
-  const noData = true
+  const noData = false
   return (
     <div className="pt-[60px] flex flex-col items-center">
       <header className="flex flex-col items-center mb-[18px]">
@@ -25,21 +28,7 @@ export default function DiaryPage() {
         {noData ? (
           <EmptyDiary />
         ) : (
-          <div className="flex gap-x-[18px] items-center">
-            <div className="text-center">
-              <Icons.happy className="mb-[6px]" />
-              <span className="font-medium text-xs tracking-[-0.03em]">
-                행복해
-              </span>
-            </div>
-            <Icons.heart />
-            <div className="text-center">
-              <Icons.cozyS className="size-10 mb-[6px]" />
-              <span className="font-medium text-xs tracking-[-0.03em]">
-                포근이
-              </span>
-            </div>
-          </div>
+          <EmotionFriendButton className="mb-[18px]" type="diary" />
         )}
       </header>
 
@@ -76,7 +65,13 @@ export default function DiaryPage() {
               }}
               mode="single"
               selected={date}
-              onSelect={setDate}
+              onSelect={(val) => {
+                if (val === undefined) {
+                  router.push("/diary/write")
+                } else {
+                  setDate(val)
+                }
+              }}
               disabled={(date) =>
                 date > new Date() || date < new Date("1900-01-01")
               }
@@ -100,7 +95,13 @@ export default function DiaryPage() {
               }}
               mode="single"
               selected={date}
-              onSelect={setDate}
+              onSelect={(val) => {
+                if (val === undefined) {
+                  router.push("/diary/write")
+                } else {
+                  setDate(val)
+                }
+              }}
               disabled={(date) =>
                 date > new Date() || date < new Date("1900-01-01")
               }

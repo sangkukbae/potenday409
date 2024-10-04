@@ -1,6 +1,5 @@
 import { Icons } from "@/components/ui/icons"
-import Image from "next/image"
-import YoutubeImg from "@/assets/images/youtube.png"
+import { YoutubeButton } from "@/components/youtube-button"
 
 export const FriendsReply = () => {
   const isLoading = false
@@ -26,12 +25,7 @@ const Reply = () => {
         🎵오늘 하루는 이 노래로 마무리 어때?
       </p>
 
-      <div className="w-full p-[10px] rounded-[8px] bg-white border border-[#dddddd] flex items-center gap-x-3 ">
-        <Image src={YoutubeImg} width={24} height={16} alt="youtube" />
-        <span className="text-sm leading-[150%] tracking-[-0.02em] text-[#333333]">
-          NewJeans - Bubble Gum
-        </span>
-      </div>
+      <YoutubeButton className="text-sm" />
     </div>
   )
 }
