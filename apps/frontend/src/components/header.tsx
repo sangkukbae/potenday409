@@ -1,15 +1,15 @@
+"use client"
+
 import { Tooltip, TooltipTrigger } from "@/components/ui/tooltip"
 
 import { Icons } from "./ui/icons"
+import Link from "next/link"
 import { TooltipContent } from "@/components/ui/tooltip-content"
 import { cn } from "@/lib/utils"
-
-// import { useState } from "react"
+import { usePathname } from "next/navigation"
 
 export const Header = () => {
-  // const [currentPath, setCurrentPath] = useState<"home" | "diary" | "mypage">(
-  //   "home"
-  // )
+  const path = usePathname()
 
   return (
     <div className="w-[750px] mx-auto h-[46px] hidden md:flex justify-between items-center px-[18px] py-[11px]">
@@ -17,37 +17,40 @@ export const Header = () => {
       <div className="flex items-center gap-x-6">
         <Tooltip>
           <TooltipTrigger asChild>
-            <Icons.home
-              className={cn(
-                "cursor-pointer fill-black"
-                // currentPath === "home" ? "fill-black" : "fill-[#c3c3c3]"
-              )}
-              // onClick={() => setCurrentPath("home")}
-            />
+            <Link href="/diary">
+              <Icons.home
+                className={cn(
+                  "cursor-pointer fill-black",
+                  path === "/diary" ? "fill-black" : "fill-[#c3c3c3]"
+                )}
+              />
+            </Link>
           </TooltipTrigger>
           <TooltipContent>홈</TooltipContent>
         </Tooltip>
         <Tooltip>
           <TooltipTrigger asChild>
-            <Icons.diary
-              className={cn(
-                "cursor-pointer fill-[#c3c3c3]"
-                // currentPath === "diary" ? "fill-black" : "fill-[#c3c3c3]"
-              )}
-              // onClick={() => setCurrentPath("diary")}
-            />
+            <Link href="/diary-list">
+              <Icons.diary
+                className={cn(
+                  "cursor-pointer fill-[#c3c3c3]",
+                  path === "/diary-list" ? "fill-black" : "fill-[#c3c3c3]"
+                )}
+              />
+            </Link>
           </TooltipTrigger>
           <TooltipContent>내일기</TooltipContent>
         </Tooltip>
         <Tooltip>
           <TooltipTrigger asChild>
-            <Icons.user
-              className={cn(
-                "cursor-pointer fill-[#c3c3c3]"
-                // currentPath === "mypage" ? "fill-black" : "fill-[#c3c3c3]"
-              )}
-              // onClick={() => setCurrentPath("mypage")}
-            />
+            <Link href="/mypage">
+              <Icons.user
+                className={cn(
+                  "cursor-pointer fill-[#c3c3c3]",
+                  path === "/mypage" ? "fill-black" : "fill-[#c3c3c3]"
+                )}
+              />
+            </Link>
           </TooltipTrigger>
           <TooltipContent>마이페이지</TooltipContent>
         </Tooltip>
