@@ -1,5 +1,4 @@
 import { BottomButton } from "@/components/bottom-button"
-import { Button } from "@/components/ui/button"
 
 export const DiaryForm = () => {
   return (
