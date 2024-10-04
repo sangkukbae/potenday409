@@ -112,6 +112,9 @@ jobs:
             pnpm install
             pnpm build
             
+            # Ensure the target directory exists
+            mkdir -p apps/backend/dist/configs
+            
             # Copy the .env file from src/configs to dist/configs
             cp apps/backend/src/configs/.env apps/backend/dist/configs/.env
 
