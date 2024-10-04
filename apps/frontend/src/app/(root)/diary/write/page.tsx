@@ -1,11 +1,11 @@
 import { DiaryForm } from "../../_component/diary-write/diary-form"
+import { DiaryWriteHeader } from "../../_component/diary-write/diary-write-header"
 import { SelectFriends } from "../../_component/diary-write/select-friends"
-import { SubHeader } from "@/components/sub-header"
 
 export default function DiaryWritePage() {
   return (
     <div className="">
-      <SubHeader />
+      <DiaryWriteHeader />
       <SelectFriends />
       <DiaryForm />
     </div>
