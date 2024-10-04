@@ -117,6 +117,17 @@ jobs:
             
             # Copy the .env file from src/configs to dist/configs
             cp apps/backend/src/configs/.env apps/backend/dist/configs/.env
+            
+            # Append secrets to the copied .env file
+            echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env
+            echo "GOOGLE_CLIENT_ID=${{ secrets.GOOGLE_CLIENT_ID }}" >> .env
+            echo "GOOGLE_CLIENT_SECRET=${{ secrets.GOOGLE_CLIENT_SECRET }}" >> .env
+            echo "KAKAO_API_KEY=${{ secrets.KAKAO_API_KEY }}" >> .env
+            echo "YOUTUBE_API_KEY=${{ secrets.YOUTUBE_API_KEY }}" >> .env
+            echo "CLOVA_API_KEY=${{ secrets.CLOVA_API_KEY }}" >> .env
+            echo "CLOVA_GATEWAY_KEY=${{ secrets.CLOVA_GATEWAY_KEY }}" >> .env
+            echo "CLOVA_REQUEST_ID=${{ secrets.CLOVA_REQUEST_ID }}" >> .env
+            echo "CLOVA_API_URL=${{ secrets.CLOVA_API_URL }}" >> .env
 
             # Reload PM2 processes
             pm2 reload ecosystem.config.js || pm2 start ecosystem.config.js
