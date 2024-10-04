@@ -1,3 +1,4 @@
+import * as path from "path"
 import * as process from "process"
 import { Diary } from "@/diary/diary.entity"
 import { YoutubeController } from "@/youtube/youtube.controller"
@@ -21,7 +22,10 @@ import { UserModule } from "./user/user.module"
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: [".env", "../src/configs/.env"],
+      envFilePath: [
+        path.resolve(__dirname, "./configs/.env"),
+        path.resolve(__dirname, "./.env"),
+      ],
       isGlobal: true,
     }),
     TypeOrmModule.forRoot({
