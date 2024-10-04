@@ -113,7 +113,7 @@ jobs:
             pnpm build
             
             # Copy the .env file from src/configs to dist/configs
-            cp src/configs/.env dist/configs/.env
+            cp apps/backend/src/configs/.env apps/backend/dist/configs/.env
 
             # Reload PM2 processes
             pm2 reload ecosystem.config.js || pm2 start ecosystem.config.js
