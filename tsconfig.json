@@ -1,10 +1,11 @@
 {
+  "extends": "./tsconfig.base.json",
   "compilerOptions": {
     "baseUrl": ".",
     "paths": {
-      "@soul-friends/config": ["packages/config"]
-    },
-    // ...other options
+      "@shared/*": ["packages/shared/src/*"],
+      "@config/*": ["packages/config/src/*"]
+    }
   },
   "include": ["apps", "packages"]
 }

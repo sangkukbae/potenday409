@@ -3,10 +3,7 @@
 	"tasks": {
 		"build": {
 			"dependsOn": ["^build"],
-			"outputs": [
-        "apps/frontend/.next/standalone/**",
-        "apps/backend/dist/**"
-      ]
+			"outputs": ["dist/**", "node_modules/.cache/**"]
 		},
 		"dev": {
 			"cache": false
@@ -14,7 +11,11 @@
 		"start": {
 			"dependsOn": ["^start"]
 		},
-		"lint": {},
-		"test": {}
+		"lint": {
+			"outputs": []
+		},
+		"test": {
+			"outputs": ["coverage/**"]
+		}
 	}
 }
