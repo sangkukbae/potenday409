@@ -1,11 +1,12 @@
 import * as path from "path"
 import * as process from "process"
 import { Diary } from "@/diary/diary.entity"
+import { LoggerMiddleware } from "@/middleware/logger.middleware"
 import { YoutubeController } from "@/youtube/youtube.controller"
 import { YoutubeModule } from "@/youtube/youtube.module"
 import { YoutubeService } from "@/youtube/youtube.service"
 import { HttpModule } from "@nestjs/axios"
-import { Module } from "@nestjs/common"
+import { MiddlewareConsumer, Module, NestModule } from "@nestjs/common"
 import { ConfigModule } from "@nestjs/config"
 import { TypeOrmModule } from "@nestjs/typeorm"
 
@@ -50,4 +51,8 @@ import { UserModule } from "./user/user.module"
   controllers: [AppController, DiaryController, YoutubeController],
   providers: [AppService, DiaryService, YoutubeService],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer.apply(LoggerMiddleware).forRoutes("*")
+  }
+}
