@@ -1,3 +1,5 @@
+import { EmotionType, FriendType } from "@/types"
+
 import { Icons } from "@/components/ui/icons"
 
 export const SOUL_FRIENDS = [
@@ -42,3 +44,36 @@ export const SOUL_FRIENDS = [
     color: "#918BD8",
   },
 ]
+
+export const SOUL_FRIENDS_CARD_COLOR = {
+  bestFriend: "#FFFBEA",
+  cozy: "#EBF8FD",
+  passion: "#FFF1F1",
+  calm: "#EEEDFF",
+}
+
+export const SOUL_FRIENDS_ICON: Record<
+  FriendType,
+  (props: { className: string }) => JSX.Element
+> = {
+  bestFriend: (props: { className: string }) => (
+    <Icons.bestFriendS {...props} />
+  ),
+  cozy: (props: { className: string }) => <Icons.cozyS {...props} />,
+  passion: (props: { className: string }) => <Icons.passionS {...props} />,
+  calm: (props: { className: string }) => <Icons.calmS {...props} />,
+}
+
+export const EMOTION_ICON: Record<
+  EmotionType,
+  (props: { className: string }) => JSX.Element
+> = {
+  afraid: (props: { className: string }) => <Icons.afraid {...props} />,
+  angry: (props: { className: string }) => <Icons.angry {...props} />,
+  common: (props: { className: string }) => <Icons.common {...props} />,
+  excited: (props: { className: string }) => <Icons.excited {...props} />,
+  flutter: (props: { className: string }) => <Icons.flutter {...props} />,
+  fun: (props: { className: string }) => <Icons.fun {...props} />,
+  good: (props: { className: string }) => <Icons.good {...props} />,
+  happy: (props: { className: string }) => <Icons.happy {...props} />,
+}
