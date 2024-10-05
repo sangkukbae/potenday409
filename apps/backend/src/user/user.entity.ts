@@ -1,11 +1,5 @@
 import { Diary } from "@/diary/diary.entity"
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  OneToMany,
-  PrimaryGeneratedColumn,
-} from "typeorm"
+import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm"
 
 @Entity()
 export class User {
@@ -29,8 +23,12 @@ export class User {
   @Column({ type: "varchar", length: 15, nullable: false })
   provider: string
 
-  @CreateDateColumn({ type: "datetime", nullable: false })
-  create_dt: Date = new Date()
+  @Column({
+    type: "datetime",
+    nullable: false,
+    default: () => "CURRENT_TIMESTAMP",
+  })
+  create_dt: Date
 
   @Column({ type: "text", nullable: true })
   refresh_token: string

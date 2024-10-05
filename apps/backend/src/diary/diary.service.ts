@@ -59,6 +59,7 @@ export class DiaryService {
       music_url,
       emotion,
       music_name,
+      update_dt: () => "CURRENT_TIMESTAMP",
     })
 
     return this.getDiary(id)

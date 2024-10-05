@@ -1,12 +1,5 @@
 import { User } from "@/user/user.entity"
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-  UpdateDateColumn,
-} from "typeorm"
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm"
 
 @Entity()
 export class Diary {
@@ -37,10 +30,14 @@ export class Diary {
   @Column({ type: "int", nullable: true, default: 0 })
   heart: number // 0 : 없음, 1:있음
 
-  @CreateDateColumn({ type: "datetime", nullable: false })
+  @Column({
+    type: "datetime",
+    nullable: false,
+    default: () => "CURRENT_TIMESTAMP",
+  })
   create_dt: Date
 
-  @UpdateDateColumn({ type: "datetime", nullable: true })
+  @Column({ type: "datetime", nullable: true })
   update_dt: Date
 
   @Column({ type: "varchar", length: 45, nullable: true })
