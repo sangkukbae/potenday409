@@ -22,14 +22,15 @@ export class UserController {
     private readonly authService: AuthService
   ) {}
 
-  @Get("check-nickname")
-  checkNickname(@Body() userData: UpdateUserDto) {
-    return this.userService.checkNickname(userData)
+  @Get("check-nickname/:username")
+  checkNickname(@Param("username") username: string) {
+    return this.userService.checkNickname(username)
   }
 
-  @Put("nickname/:id")
-  updateNickname(@Param("id") id: number, @Body() userData: UpdateUserDto) {
-    return this.userService.updateNickname(id, userData)
+  @Put("nickname")
+  @UseGuards(JwtGuard)
+  updateNickname(@Request() req, @Body() userData: UpdateUserDto) {
+    return this.userService.updateNickname(req.user.id, userData)
   }
 
   @Get("info")
