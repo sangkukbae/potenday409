@@ -51,7 +51,7 @@ export class DiaryService {
       await this.clovaService.generateResponse(
         diary.title,
         diary.character,
-        diary.content
+        updateData.content
       )
     await this.diaryRepository.update(id, {
       ...updateData,
