@@ -11,7 +11,7 @@ export class KakaoStrategy extends PassportStrategy(Strategy, "kakao") {
     super({
       clientID: process.env.KAKAO_API_KEY,
       callbackURL: process.env.KAKAO_CALLBACK_URL,
-      scope: ["profile_nickname"],
+      scope: ["profile_nickname", "account_email"],
     })
   }
 
@@ -20,20 +20,13 @@ export class KakaoStrategy extends PassportStrategy(Strategy, "kakao") {
     refreshToken: string,
     profile: Profile
   ): Promise<User> {
-    const { id } = profile
+    const { id, _raw } = profile
+    const email = JSON.parse(_raw)["kakao_account"]["email"]
     console.log("accessToken : " + accessToken)
     console.log("refreshToken : " + refreshToken)
 
     const providerId = id
-    const email = `test@test.com${id}` // 실제 이메일을 가져오려면 주석 해제 후 사용
 
-    // 유저 정보 저장 혹은 가져오기
-    const user: User = await this.userService.findByEmailOrSave(
-      email,
-      providerId,
-      "kakao"
-    )
-
-    return user
+    return await this.userService.findByEmailOrSave(email, providerId, "kakao")
   }
 }
