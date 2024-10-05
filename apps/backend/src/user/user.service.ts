@@ -46,6 +46,14 @@ export class UserService {
     })
   }
 
+  async checkNickname(userData: UpdateUserDto) {
+    const user = await this.userRepository.findOne({
+      where: { user_name: userData.username },
+    })
+
+    return !user
+  }
+
   async updateNickname(
     id: number,
     userData: UpdateUserDto

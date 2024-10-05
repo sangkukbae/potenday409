@@ -22,6 +22,11 @@ export class UserController {
     private readonly authService: AuthService
   ) {}
 
+  @Get("check-nickname")
+  checkNickname(@Body() userData: UpdateUserDto) {
+    return this.userService.checkNickname(userData)
+  }
+
   @Put("nickname/:id")
   updateNickname(@Param("id") id: number, @Body() userData: UpdateUserDto) {
     return this.userService.updateNickname(id, userData)
