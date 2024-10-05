@@ -1,3 +1,4 @@
+import { JwtGuard } from "@/auth/auth.guard"
 import { CreateDiaryDto, UpdateDiaryDto } from "@/diary/dirary.dto"
 import {
   Body,
@@ -8,6 +9,8 @@ import {
   Patch,
   Post,
   Query,
+  Request,
+  UseGuards,
 } from "@nestjs/common"
 
 import { DiaryService } from "./diary.service"
@@ -31,28 +34,30 @@ export class DiaryController {
     return this.diaryService.deleteDiary(id)
   }
 
-  @Get(":userId")
+  @Get()
+  @UseGuards(JwtGuard)
   async findDiary(
-    @Param("userId") userId: number,
+    @Request() req,
     @Query("sort") sort: string, // sort 쿼리 파라미터 (recent, old, like 가능)
     @Query("limit") limit: number = 15
   ) {
     const sortArray = sort ? sort.split(",") : ["recent"]
-    const result = await this.diaryService.find(userId, sortArray, limit)
+    const result = await this.diaryService.find(req.user.id, sortArray, limit)
     console.log(result)
     return result
   }
 
-  @Get(":userId/multiple")
+  @Get("multiple")
+  @UseGuards(JwtGuard)
   findMultiple(
-    @Param("userId") userId: number,
+    @Request() req,
     @Query("year") year: number,
     @Query("month") month: number
   ) {
-    return this.diaryService.findMultiple({ userId, year, month })
+    return this.diaryService.findMultiple({ userId: req.user.id, year, month })
   }
 
-  @Patch()
+  @Patch(":id/update-heart")
   updateDiaryHeart(@Param("id") id: number, @Query("heart") heart: number) {
     return this.diaryService.updateDiaryHeart(id, heart)
   }

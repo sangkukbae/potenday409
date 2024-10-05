@@ -76,15 +76,14 @@ export class DiaryService {
   async find(userId: number, sort: string[], limit: number) {
     let order = {}
 
-    // sort 배열에 따른 동적 정렬 설정
-    if (sort.includes("recent")) {
-      order = { create_dt: "DESC" } // 최신순
-    } else if (sort.includes("old")) {
-      order = { create_dt: "ASC" } // 오래된순
+    if (sort.includes("heart")) {
+      order = { heart: "DESC" }
     }
 
-    if (sort.includes("like")) {
-      order = { ...order, heart: "DESC" }
+    if (sort.includes("recent")) {
+      order = { ...order, create_dt: "DESC" } // 최신순
+    } else if (sort.includes("old")) {
+      order = { ...order, create_dt: "ASC" } // 오래된순
     }
 
     const result = await this.diaryRepository.find({
