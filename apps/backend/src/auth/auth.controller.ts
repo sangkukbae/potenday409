@@ -16,25 +16,41 @@ export class AuthController {
   @UseGuards(GoogleAuthGuard)
   async googleAuth() {}
 
-  @Get("google") //구글 로그인 후 콜백 실행 후 콜백 실행 후 이동 시 실행되는 라이터 메서드
+  @Get("google")
   @UseGuards(GoogleAuthGuard)
   async googleAuthRedirect(@Request() req, @Response() res) {
     const { user } = req
     const { accessToken, refreshToken } =
       await this.authService.googleLogin(user)
-    return res.send({ access_token: accessToken, refresh_token: refreshToken })
+
+    res.cookie("access_token", accessToken, { httpOnly: true, secure: true })
+    res.cookie("refresh_token", refreshToken, { httpOnly: true, secure: true })
+
+    if (!user.user_name) {
+      return res.redirect("/nickname")
+    } else {
+      return res.redirect("/diary")
+    }
   }
 
   @UseGuards(KakaoAuthGuard)
   @Get("to-kakao")
   async kakaoAuth() {}
 
-  @Get("kakao") //구글 로그인 후 콜백 실행 후 콜백 실행 후 이동 시 실행되는 라이터 메서드
+  @Get("kakao")
   @UseGuards(KakaoAuthGuard)
   async kakaoAuthRedirect(@Request() req, @Response() res) {
     const { user } = req
     const { accessToken, refreshToken } =
       await this.authService.kakaoLogin(user)
-    return res.send({ access_token: accessToken, refresh_token: refreshToken })
+
+    res.cookie("access_token", accessToken, { httpOnly: true, secure: true }) // httpOnly 및 secure 설정
+    res.cookie("refresh_token", refreshToken, { httpOnly: true, secure: true }) // httpOnly 및 secure 설정
+
+    if (!user.user_name) {
+      return res.redirect("/nickname")
+    } else {
+      return res.redirect("/diary")
+    }
   }
 }
