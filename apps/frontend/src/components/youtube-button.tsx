@@ -1,5 +1,5 @@
 import Image from "next/image"
-import YoutubeImg from "@/app/assets/images/youtube.png"
+import YoutubeIcon from "@/app/assets/icons/ico_youtube.svg"
 import { cn } from "@/lib/utils"
 
 export const YoutubeButton = ({ className }: { className?: string }) => {
@@ -10,7 +10,7 @@ export const YoutubeButton = ({ className }: { className?: string }) => {
         className
       )}
     >
-      <Image src={YoutubeImg.src} width={24} height={16} alt="youtube" />
+      <Image src={YoutubeIcon.src} width={24} height={16} alt="youtube" />
       <span className="leading-[150%] tracking-[-0.02em] text-[#333333]">
         NewJeans - Bubble Gum
       </span>

@@ -1,3 +1,9 @@
+import { OnBoardingSlider } from "@/components/on-boarding-slider"
+
 export default function SignInPage() {
-  return <div className="">로그인</div>
+  return (
+    <div className="">
+      <OnBoardingSlider />
+    </div>
+  )
 }
