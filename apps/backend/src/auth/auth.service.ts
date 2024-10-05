@@ -41,14 +41,14 @@ export class AuthService {
   private generateAccessToken(payload: JwtPayload) {
     return this.jwtService.sign(payload, {
       secret: process.env.JWT_SECRET,
-      expiresIn: "1h",
+      expiresIn: "2h",
     })
   }
 
   private generateRefreshToken(payload: JwtPayload) {
     return this.jwtService.sign(payload, {
       secret: process.env.JWT_SECRET,
-      expiresIn: "1d",
+      expiresIn: "3d",
     })
   }
 
@@ -61,6 +61,12 @@ export class AuthService {
       throw new UnauthorizedException("Invalid refresh token")
     }
 
-    return await this.generateTokens(user)
+    const payload: JwtPayload = {
+      id: user.id,
+      email: user.email,
+      user_name: user.user_name,
+    }
+
+    return { accessToken: this.generateAccessToken(payload) }
   }
 }
