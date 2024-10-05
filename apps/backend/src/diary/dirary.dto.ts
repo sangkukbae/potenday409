@@ -2,9 +2,6 @@ import { IsNotEmpty } from "class-validator"
 
 export class CreateDiaryDto {
   @IsNotEmpty()
-  user_id: number
-
-  @IsNotEmpty()
   title: string
 
   @IsNotEmpty()

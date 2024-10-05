@@ -20,8 +20,9 @@ export class DiaryController {
   constructor(private readonly diaryService: DiaryService) {}
 
   @Post()
-  createDiary(@Body() diaryData: CreateDiaryDto) {
-    return this.diaryService.createDiary(diaryData)
+  @UseGuards(JwtGuard)
+  createDiary(@Request() req, @Body() diaryData: CreateDiaryDto) {
+    return this.diaryService.createDiary(req.user.id, diaryData)
   }
 
   @Patch(":id")

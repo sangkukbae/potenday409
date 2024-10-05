@@ -16,8 +16,8 @@ export class DiaryService {
     private readonly clovaService: ClovaService
   ) {}
 
-  async createDiary(diaryData: CreateDiaryDto) {
-    const user = await this.userService.getUserById(diaryData.user_id)
+  async createDiary(userId, diaryData: CreateDiaryDto) {
+    const user = await this.userService.getUserById(userId)
     const diary = this.diaryRepository.create({ ...diaryData, user })
     const { reply_content, music_url, emotion, music_name } =
       await this.clovaService.generateResponse(
