@@ -1,76 +1,97 @@
-import { Icon } from "@/components/icon"
-import { Icons } from "./ui/icons"
-import Link from "next/link"
+import { usePathname, useRouter } from "next/navigation"
+import { useAlert } from "@/store/alert"
+
 import { cn } from "@/lib/utils"
-import { usePathname } from "next/navigation"
-import { useState } from "react"
+import { Icon } from "@/components/icon"
+
+import { Icons } from "./ui/icons"
 
 export const AppNavbar = () => {
   const path = usePathname()
-  console.log("path:", path)
-  const [currentTab, setCurrentTab] = useState<"home" | "diary" | "mypage">(
-    "home"
-  )
+  const router = useRouter()
 
-  if (path !== "/diary" && path !== "/diary-list") {
+  const isLogin = false
+  const { setAlert } = useAlert()
+
+  if (path !== "/diary" && path !== "/diary-list" && path !== "/mypage") {
     return null
+  }
+
+  const alertLogin = () => {
+    setAlert({
+      open: true,
+      title: "로그인이 필요한 메뉴입니다",
+      description: "로그인 하시겠어요?",
+      cancelName: "취소",
+      confirmName: "로그인",
+      confirmAction: () => router.push("/sign-in"),
+    })
   }
 
   return (
     <div className="fixed left-0 bottom-0 flex md:hidden justify-around h-20 border-t border-[#ebebeb] pt-4 bg-white w-full">
-      <Link href="/diary">
+      <div onClick={() => router.push("/diary")}>
         <Icon
           className={cn(
             "text-[10px]",
-            currentTab === "home" ? "text-black" : "text-[#c3c3c3]"
+            path === "/diary" ? "text-black" : "text-[#c3c3c3]"
           )}
           icon={
             <Icons.home
-              className={
-                currentTab === "home" ? "fill-black" : "fill-[#c3c3c3]"
-              }
+              className={path === "/diary" ? "fill-black" : "fill-[#c3c3c3]"}
             />
           }
           text="홈"
-          onChangeValue={() => setCurrentTab("home")}
         />
-      </Link>
+      </div>
 
-      <Link href="/diary-list">
+      <div
+        onClick={() => {
+          if (isLogin) {
+            router.push("/diary-list")
+          } else {
+            alertLogin()
+          }
+        }}
+      >
         <Icon
           className={cn(
             "text-[10px]",
-            currentTab === "diary" ? "text-black" : "text-[#c3c3c3]"
+            path === "/diary-list" ? "text-black" : "text-[#c3c3c3]"
           )}
           icon={
             <Icons.diary
               className={
-                currentTab === "diary" ? "fill-black" : "fill-[#c3c3c3]"
+                path === "/diary-list" ? "fill-black" : "fill-[#c3c3c3]"
               }
             />
           }
           text="내일기"
-          onChangeValue={() => setCurrentTab("diary")}
         />
-      </Link>
+      </div>
 
-      <Link href="/mypage">
+      <div
+        onClick={() => {
+          if (isLogin) {
+            router.push("/mypage")
+          } else {
+            alertLogin()
+          }
+        }}
+      >
         <Icon
           className={cn(
             "text-[10px]",
-            currentTab === "mypage" ? "text-black" : "text-[#c3c3c3]"
+            path === "/mypage" ? "text-black" : "text-[#c3c3c3]"
           )}
           icon={
             <Icons.user
-              className={
-                currentTab === "mypage" ? "fill-black" : "fill-[#c3c3c3]"
-              }
+              className={path === "/mypage" ? "fill-black" : "fill-[#c3c3c3]"}
             />
           }
           text="마이페이지"
-          onChangeValue={() => setCurrentTab("mypage")}
         />
-      </Link>
+      </div>
     </div>
   )
 }

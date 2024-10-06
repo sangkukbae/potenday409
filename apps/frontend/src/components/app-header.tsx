@@ -2,10 +2,11 @@
 
 import { ButtonGroup } from "./button-group"
 import { Icons } from "./ui/icons"
+import { formatKRDate } from "@/lib/utils"
 import { useAlert } from "@/store/alert"
 import { useRouter } from "next/navigation"
 
-export const AppHeader = () => {
+export const AppHeader = ({ date }: { date: string }) => {
   const { setAlert } = useAlert()
   const router = useRouter()
   const isEditing = true
@@ -27,7 +28,7 @@ export const AppHeader = () => {
         }}
       />
       <div className="text-center font-bold tracking-[-0.03em]">
-        10월 2일 수요일
+        {formatKRDate(date)}
       </div>
 
       <ButtonGroup className="absolute right-[12px]" size="md" />

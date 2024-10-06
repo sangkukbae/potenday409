@@ -3,7 +3,9 @@ import "./globals.css"
 import { Footer } from "@/components/footer"
 import { Header } from "@/components/header"
 import type { Metadata } from "next"
+import { NavigationEvents } from "@/components/navigation-events"
 import { Providers } from "@/components/providers"
+import { Suspense } from "react"
 import localFont from "next/font/local"
 
 const pretendard = localFont({
@@ -38,6 +40,9 @@ export default function RootLayout({
               {children}
             </main>
             <Footer />
+            <Suspense fallback={null}>
+              <NavigationEvents />
+            </Suspense>
           </div>
         </Providers>
       </body>

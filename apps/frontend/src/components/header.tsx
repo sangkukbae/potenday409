@@ -1,13 +1,12 @@
 "use client"
 
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-
-import { cn } from "@/lib/utils"
 import { Tooltip, TooltipTrigger } from "@/components/ui/tooltip"
-import { TooltipContent } from "@/components/ui/tooltip-content"
 
 import { Icons } from "./ui/icons"
+import Link from "next/link"
+import { TooltipContent } from "@/components/ui/tooltip-content"
+import { cn } from "@/lib/utils"
+import { usePathname } from "next/navigation"
 
 export const Header = () => {
   const path = usePathname()
@@ -44,7 +43,12 @@ export const Header = () => {
         </Tooltip>
         <Tooltip>
           <TooltipTrigger
-            className={cn({ "md:hidden": path === "/sign-in" })}
+            className={cn({
+              "md:hidden":
+                path === "/sign-in" ||
+                path === "/nickname" ||
+                path === "/nickname/complete",
+            })}
             asChild
           >
             <Link href="/diary-list">
@@ -64,7 +68,12 @@ export const Header = () => {
         </Tooltip>
         <Tooltip>
           <TooltipTrigger
-            className={cn({ "md:hidden": path === "/sign-in" })}
+            className={cn({
+              "md:hidden":
+                path === "/sign-in" ||
+                path === "/nickname" ||
+                path === "/nickname/complete",
+            })}
             asChild
           >
             <Link href="/mypage">

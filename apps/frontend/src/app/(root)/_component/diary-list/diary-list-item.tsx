@@ -1,14 +1,13 @@
 "use client"
 
+import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { SOUL_FRIENDS_CARD_COLOR } from "@/constants"
 import { EmotionType, FriendType } from "@/types"
 
 import { ButtonGroup } from "@/components/button-group"
 import { EmotionFriendButton } from "@/components/emotion-friend-button"
-import Link from "next/link"
-// import Link from "next/link"
-import { SOUL_FRIENDS_CARD_COLOR } from "@/constants"
 import { YoutubeButton } from "@/components/youtube-button"
-import { useRouter } from "next/navigation"
 
 export const DiaryListItem = ({
   emotion,
@@ -36,6 +35,7 @@ export const DiaryListItem = ({
         일기 제목 영역
       </h2>
       <Link
+        className="inline-block"
         href="https://www.youtube.com/watch?v=ft70sAYrFyY&ab_channel=HYBELABELS"
         target="_blank"
       >

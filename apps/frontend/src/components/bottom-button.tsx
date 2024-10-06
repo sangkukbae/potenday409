@@ -1,17 +1,25 @@
+"use client"
+
 import { Button } from "./ui/button"
 
 interface BottomButtonProps {
-  value: string
+  value: string | React.ReactNode
   action?: () => void
+  disabled?: boolean
 }
 
-export const BottomButton = ({ value }: BottomButtonProps) => {
+export const BottomButton = ({
+  value,
+  disabled,
+  action,
+}: BottomButtonProps) => {
   return (
-    <div className="fixed bottom-0 left-0 w-full py-5 text-center bg-white border-t px-[18px]">
+    <div className="fixed bottom-0 left-0 w-full py-5 text-center bg-white border-t px-[18px] md:max-w-[500px] md:left-1/2 md:-translate-x-1/2 md:px-0">
       <Button
-        className="w-full max-w-[500px] h-[42px] bg-black text-white rounded-[8px]"
+        className="w-full  h-[42px] bg-black text-white rounded-[8px]"
         type="button"
-        // onClick={() => action?.()}
+        disabled={disabled}
+        onClick={() => action?.()}
       >
         {value}
       </Button>

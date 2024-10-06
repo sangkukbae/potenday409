@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react"
 import Image from "next/image"
-import Link from "next/link"
 
 import { cn } from "@/lib/utils"
 import {
@@ -12,7 +11,7 @@ import {
   type CarouselApi,
 } from "@/components/ui/carousel"
 import OnBoardingImg01 from "@/app/assets/images/on_boarding_01.svg"
-import OnBoardingImg02 from "@/app/assets/images/on_boarding_02.png"
+import OnBoardingImg02 from "@/app/assets/images/on_boarding_02.svg"
 import OnBoardingImg03 from "@/app/assets/images/on_boarding_03.svg"
 
 import { Icons } from "./ui/icons"
@@ -34,7 +33,7 @@ export const OnBoardingSlider = () => {
   }, [api])
 
   return (
-    <div className="grid mb-10 place-items-center">
+    <div className="grid place-items-center">
       <Carousel setApi={setApi} className="w-full">
         <CarouselContent>
           {/* onboarding 01 */}
@@ -118,24 +117,6 @@ export const OnBoardingSlider = () => {
           )}
         />
       </div>
-
-      <button className="w-[316px] h-[48px] rounded-[8px] bg-[#FEE500] flex items-center justify-center gap-x-3 mb-3">
-        <Icons.kakao />
-        <span className="font-medium tracking-[-0.03em] text-black">
-          카카오로 시작하기
-        </span>
-      </button>
-      <button className="w-[316px] h-[48px] rounded-[8px] bg-white border border-[#D9D9D9] flex items-center justify-center gap-x-3 mb-5">
-        <Icons.google />
-        <span>구글로 시작하기</span>
-      </button>
-
-      <Link
-        className="font-medium text-sm tracking-[-0.03em] text-[#A0A0A0] hover:underline hover:underline-offset-4"
-        href="/diary"
-      >
-        홈으로 이동하기
-      </Link>
     </div>
   )
 }

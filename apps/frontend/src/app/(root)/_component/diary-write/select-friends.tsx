@@ -3,32 +3,41 @@
 import { Icon } from "@/components/icon"
 import { SOUL_FRIENDS } from "@/constants"
 import { cn } from "@/lib/utils"
+import { useDiary } from "@/store/diary"
 import { useState } from "react"
 
 export const SelectFriends = () => {
   const [selected, setSelected] = useState("bestFriend")
 
+  const { setCharacter } = useDiary((state) => state)
+
   const currentFriend = SOUL_FRIENDS.find((item) => item.name === selected)
 
   return (
-    <div className="pt-6 px-[18px] flex flex-col items-center">
+    <div className="pt-6 px-[18px] flex flex-col items-center w-full md:max-w-[500px] mx-auto">
       <p className="text-sm font-medium tracking-[-0.03em] text-[#333333] text-center mb-[18px]">
         조언을 받고 싶은 소울프렌즈를 골라주세요
       </p>
-      <div className="flex mb-3 gap-x-5">
+      <ul className="flex mb-3 gap-x-5">
         {SOUL_FRIENDS.map((item) => (
-          <Icon
-            className={cn(
-              "text-xs",
-              selected === item.name ? "text-[#333333]" : "text-[#c3c3c3]"
-            )}
+          <li
             key={item.name}
-            icon={selected === item.name ? item.icon.on : item.icon.off}
-            text={item.text}
-            onChangeValue={() => setSelected(item.name)}
-          />
+            onClick={() => {
+              setSelected(item.name)
+              setCharacter(item.text)
+            }}
+          >
+            <Icon
+              className={cn(
+                "text-xs",
+                selected === item.name ? "text-[#333333]" : "text-[#c3c3c3]"
+              )}
+              icon={selected === item.name ? item.icon.on : item.icon.off}
+              text={item.text}
+            />
+          </li>
         ))}
-      </div>
+      </ul>
 
       <div
         className="w-[210px] h-[26px] rounded-[20px] text-center mb-[18px]"

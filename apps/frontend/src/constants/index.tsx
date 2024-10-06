@@ -12,6 +12,7 @@ export const SOUL_FRIENDS = [
     },
     description: "발랄하고 친근한 공감의 대가",
     color: "#FFDC4C",
+    bgColor: "#FFFBEA",
   },
   {
     name: "cozy",
@@ -22,6 +23,7 @@ export const SOUL_FRIENDS = [
     },
     description: "다정하고 따뜻한위로의 대가",
     color: "#80CFEE",
+    bgColor: "#EBF8FD",
   },
   {
     name: "passion",
@@ -32,6 +34,7 @@ export const SOUL_FRIENDS = [
     },
     description: "쿨하고 열정적인 파이팅의 대가",
     color: "#FF7871",
+    bgColor: "#FFF1F1",
   },
   {
     name: "calm",
@@ -42,6 +45,7 @@ export const SOUL_FRIENDS = [
     },
     description: "시크하고 담백한해결의 대가",
     color: "#918BD8",
+    bgColor: "#EEEDFF",
   },
 ]
 
@@ -76,4 +80,9 @@ export const EMOTION_ICON: Record<
   fun: (props: { className: string }) => <Icons.fun {...props} />,
   good: (props: { className: string }) => <Icons.good {...props} />,
   happy: (props: { className: string }) => <Icons.happy {...props} />,
+}
+
+export const COOKIE_KEY = {
+  ACCESS_TOKEN: "access_token",
+  REFRESH_TOKEN: "refresh_token",
 }

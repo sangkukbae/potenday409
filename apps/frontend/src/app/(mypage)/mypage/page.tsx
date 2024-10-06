@@ -1,9 +1,11 @@
-import Link from "next/link"
-
 import { Button } from "@/components/ui/button"
 import { Icons } from "@/components/ui/icons"
+import Link from "next/link"
+import { getUserInfo } from "@/actions/user"
 
-export default function MypagePage() {
+export default async function MypagePage() {
+  const userInfo = await getUserInfo()
+
   return (
     <div className="">
       <header className="font-bold tracking-[-0.03em] text-black text-center pt-[47px] pb-[36px] md:pt-[13px] md:pb-[24px]">
@@ -22,7 +24,7 @@ export default function MypagePage() {
             <span className="font-medium text-sm tracking-[-0.03em] text-[#333333]">
               닉네임
             </span>
-            <span className="text-sm text-[#8D8D8D]">짱구는 못말려</span>
+            <span className="text-sm text-[#8D8D8D]">{userInfo.user_name}</span>
           </div>
           <Link href="/nickname/change">
             <Button
@@ -40,9 +42,7 @@ export default function MypagePage() {
             <span className="font-medium text-sm tracking-[-0.03em] text-[#333333]">
               연결된 계정
             </span>
-            <span className="text-sm text-[#8D8D8D]">
-              soulfriends@kakao.com
-            </span>
+            <span className="text-sm text-[#8D8D8D]">{userInfo.email}</span>
           </div>
         </div>
       </div>
