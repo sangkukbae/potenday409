@@ -71,7 +71,7 @@ export const OnBoardingSlider = () => {
             </h2>
             <p className="font-medium text-sm text-[#A0A0A0] tracking-[-0.03em] text-center mb-[29px]">
               소울프렌즈가 내 감정을 분석하고 <br />
-              답장과 함께 음악을 추천해 줄 거 에요
+              답장과 함께 음악을 추천해 줄 거에요
             </p>
           </CarouselItem>
 
@@ -87,7 +87,7 @@ export const OnBoardingSlider = () => {
             <h2 className="font-bold text-[22px] leading-[130%] tracking-[-0.03em] mb-5">
               그럼 이제 일기쓰기를 시작해 볼까요?
             </h2>
-            <p className="font-medium text-sm text-[#A0A0A0] tracking-[-0.03em] mb-[29px]">
+            <p className="font-medium text-sm text-[#A0A0A0] tracking-[-0.03em] mb-[29px] text-center">
               오늘 하루 당신의 이야기를 들려주세요 <br />
               소울프렌즈가 기다리고 있어요!
             </p>
