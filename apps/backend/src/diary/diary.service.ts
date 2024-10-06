@@ -25,6 +25,7 @@ export class DiaryService {
   ) {
     const user = await this.userService.getUserById(userId)
     const diary = this.diaryRepository.create({ ...diaryData, user })
+    const save_dt = new Date(year, month - 1, day)
 
     if (!(await this.validateDiary(userId, year, month, day))) {
       throw new BadRequestException(
@@ -45,6 +46,7 @@ export class DiaryService {
       music_url,
       emotion,
       music_name,
+      save_dt,
     })
   }
 

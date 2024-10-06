@@ -42,4 +42,11 @@ export class Diary {
 
   @Column({ type: "varchar", length: 45, nullable: true })
   music_name: string
+
+  @Column({
+    type: "datetime",
+    nullable: false,
+    default: () => "CURRENT_TIMESTAMP",
+  })
+  save_dt: Date
 }
