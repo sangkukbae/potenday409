@@ -1,10 +1,19 @@
 import { NextRequest, NextResponse } from "next/server"
 
 import { COOKIE_KEY } from "./constants"
+import { absoluteUrl } from "./lib/utils"
 import { updateToken } from "./actions"
 
+// Define all protected routes
+const protectedRoutes = [
+  "/mypage",
+  "/nickname",
+  /^\/diary\/[^/]+$/, // Matches /diary/:id where :id is any non-slash string
+  /^\/nickname\/.*$/, // Matches /nickname/* (any subpath under /nickname/)
+]
+
 export default async function middleware(request: NextRequest) {
-  // const { pathname, searchParams } = request.nextUrl
+  const { pathname } = request.nextUrl
 
   const accessToken = request.cookies.get(COOKIE_KEY.ACCESS_TOKEN)?.value
   const refreshToken = request.cookies.get(COOKIE_KEY.REFRESH_TOKEN)?.value
@@ -21,7 +30,18 @@ export default async function middleware(request: NextRequest) {
       return response
     }
   }
+
+  if (pathname === "/") {
+    return NextResponse.redirect(absoluteUrl("/diary", request.url))
+  }
+
+  if (protectedRoutes.some((route) => new RegExp(route).test(pathname))) {
+    if (!accessToken) {
+      return NextResponse.redirect(absoluteUrl("/sign-in", request.url))
+    }
+  }
 }
+
 export const config = {
   matcher: [
     /*

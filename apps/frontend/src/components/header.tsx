@@ -51,11 +51,11 @@ export const Header = () => {
             })}
             asChild
           >
-            <Link href="/diary-list">
+            <Link href="/diary/list">
               <Icons.diary
                 className={cn(
                   "cursor-pointer fill-[#c3c3c3] hover:fill-black",
-                  path === "/diary-list" ? "fill-black" : "fill-[#c3c3c3]"
+                  path === "/diary/list" ? "fill-black" : "fill-[#c3c3c3]"
                 )}
               />
             </Link>

@@ -6,7 +6,7 @@ export default function Home() {
       <Link href="/diary">홈</Link>
       <Link href="/diary/write">일기 작성</Link>
       <Link href="/diary/1">일기 답장</Link>
-      <Link href="/diary-list">일기 목록</Link>
+      <Link href="/diary/list">일기 목록</Link>
     </div>
   )
 }

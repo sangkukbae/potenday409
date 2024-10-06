@@ -20,3 +20,7 @@ export const formatKRDate = (
   const zonedDate = toZonedTime(parsedDate, timeZone)
   return format(zonedDate, "M월 d일 EEEE", { locale: ko })
 }
+
+export function absoluteUrl(pathname: string, origin: string): string {
+  return new URL(pathname, origin).toString()
+}

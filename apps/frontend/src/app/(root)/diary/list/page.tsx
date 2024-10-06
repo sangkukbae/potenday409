@@ -1,9 +1,8 @@
 "use client"
 
+import { DiaryListHeader } from "../../_component/diary-list/diary-list-header"
+import { DiaryListItem } from "../../_component/diary-list/diary-list-item"
 import { Pagination } from "@/components/pagination"
-
-import { DiaryListHeader } from "../_component/diary-list/diary-list-header"
-import { DiaryListItem } from "../_component/diary-list/diary-list-item"
 
 export default function DiaryListPage() {
   return (

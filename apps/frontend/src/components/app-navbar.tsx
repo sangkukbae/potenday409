@@ -1,10 +1,9 @@
 import { usePathname, useRouter } from "next/navigation"
-import { useAlert } from "@/store/alert"
 
-import { cn } from "@/lib/utils"
 import { Icon } from "@/components/icon"
-
 import { Icons } from "./ui/icons"
+import { cn } from "@/lib/utils"
+import { useAlert } from "@/store/alert"
 
 export const AppNavbar = () => {
   const path = usePathname()
@@ -13,7 +12,7 @@ export const AppNavbar = () => {
   const isLogin = false
   const { setAlert } = useAlert()
 
-  if (path !== "/diary" && path !== "/diary-list" && path !== "/mypage") {
+  if (path !== "/diary" && path !== "/diary/list" && path !== "/mypage") {
     return null
   }
 
@@ -48,7 +47,7 @@ export const AppNavbar = () => {
       <div
         onClick={() => {
           if (isLogin) {
-            router.push("/diary-list")
+            router.push("/diary/list")
           } else {
             alertLogin()
           }
@@ -57,12 +56,12 @@ export const AppNavbar = () => {
         <Icon
           className={cn(
             "text-[10px]",
-            path === "/diary-list" ? "text-black" : "text-[#c3c3c3]"
+            path === "/diary/list" ? "text-black" : "text-[#c3c3c3]"
           )}
           icon={
             <Icons.diary
               className={
-                path === "/diary-list" ? "fill-black" : "fill-[#c3c3c3]"
+                path === "/diary/list" ? "fill-black" : "fill-[#c3c3c3]"
               }
             />
           }
