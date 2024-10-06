@@ -1,19 +1,20 @@
 "use client"
 
-import { EmotionType, FriendType } from "@/types"
+import Link from "next/link"
+import { useRouter } from "next/navigation"
+import { SOUL_FRIENDS_CARD_COLOR } from "@/constants"
 
 import { ButtonGroup } from "@/components/button-group"
 import { EmotionFriendButton } from "@/components/emotion-friend-button"
-import Link from "next/link"
-import { SOUL_FRIENDS_CARD_COLOR } from "@/constants"
 import { YoutubeButton } from "@/components/youtube-button"
-import { useRouter } from "next/navigation"
+
+type FriendType = keyof typeof SOUL_FRIENDS_CARD_COLOR
 
 export const DiaryListItem = ({
   emotion,
   friend,
 }: {
-  emotion: EmotionType
+  emotion: string
   friend: FriendType
 }) => {
   const color = SOUL_FRIENDS_CARD_COLOR[friend]

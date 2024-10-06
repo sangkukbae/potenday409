@@ -28,7 +28,7 @@ export const EmotionFriendButton = ({
       )}
     >
       <div className="relative text-center">
-        {EMOTION_ICON[emotion]({
+        {EMOTION_ICON[emotion]?.({
           className: cn(
             "mb-[6px]",
             type === "diary" ? "size-10" : "size-[28px]"
@@ -42,7 +42,7 @@ export const EmotionFriendButton = ({
       </div>
       <Icons.heart />
       <div className="relative text-center">
-        {SOUL_FRIENDS_ICON[friend]({
+        {SOUL_FRIENDS_ICON[friend]?.({
           className: cn(
             "mb-[6px]",
             type === "diary" ? "size-10" : "size-[28px]"

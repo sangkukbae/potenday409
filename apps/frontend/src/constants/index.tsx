@@ -50,10 +50,10 @@ export const SOUL_FRIENDS = [
 ]
 
 export const SOUL_FRIENDS_CARD_COLOR = {
-  bestFriend: "#FFFBEA",
-  cozy: "#EBF8FD",
-  passion: "#FFF1F1",
-  calm: "#EEEDFF",
+  단짝이: "#FFFBEA",
+  포근이: "#EBF8FD",
+  열정이: "#FFF1F1",
+  차분이: "#EEEDFF",
 }
 
 export const SOUL_FRIENDS_ICON: Record<
