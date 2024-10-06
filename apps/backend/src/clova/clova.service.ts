@@ -43,41 +43,70 @@ export class ClovaService {
       seed: 0,
     }
 
-    try {
-      const response = await lastValueFrom(
-        this.httpService.post(process.env.CLOVA_API_URL, data, {
-          headers: {
-            "X-NCP-CLOVASTUDIO-API-KEY": process.env.CLOVA_API_KEY,
-            "X-NCP-APIGW-API-KEY": process.env.CLOVA_GATEWAY_KEY,
-            "X-NCP-CLOVASTUDIO-REQUEST-ID": process.env.CLOVA_REQUEST_ID,
-            "Content-Type": "application/json",
-            Accept: "text/event-stream",
-          },
-        })
-      )
+    let resultData
+    let attempts = 0
+    const maxAttempts = 3 // 최대 재시도 횟수
 
-      const resultData = this.extractResultData(response.data)
-      const { content, emotion } = resultData
-      const music_url = await this.youtubeService.searchSong(
-        `${resultData.songArtist + resultData.songTitle}`
-      )
-      return {
-        reply_content: content,
-        music_url,
-        emotion,
-        music_name: `${resultData.songArtist} - ${resultData.songTitle}`,
+    while (attempts < maxAttempts) {
+      try {
+        const response = await lastValueFrom(
+          this.httpService.post(process.env.CLOVA_API_URL, data, {
+            headers: {
+              "X-NCP-CLOVASTUDIO-API-KEY": process.env.CLOVA_API_KEY,
+              "X-NCP-APIGW-API-KEY": process.env.CLOVA_GATEWAY_KEY,
+              "X-NCP-CLOVASTUDIO-REQUEST-ID": process.env.CLOVA_REQUEST_ID,
+              "Content-Type": "application/json",
+              Accept: "text/event-stream",
+            },
+          })
+        )
+
+        resultData = this.extractResultData(response.data)
+
+        if (
+          resultData.songArtist &&
+          resultData.songTitle &&
+          resultData.emotion
+        ) {
+          break
+        } else {
+          attempts++
+        }
+      } catch (error) {
+        console.error(error)
+        throw new HttpException(
+          "Error communicating with Clova API",
+          error.response?.status || 500
+        )
       }
-    } catch (error) {
-      console.error(error)
-      throw new HttpException(
-        "Error communicating with Clova API",
-        error.response?.status || 500
+    }
+
+    if (
+      !resultData ||
+      !resultData.songArtist ||
+      !resultData.songTitle ||
+      !resultData.emotion
+    ) {
+      throw new Error(
+        "Failed to retrieve valid response after multiple attempts"
       )
+    }
+
+    const { reply_content, emotion } = resultData
+    const music_url = await this.youtubeService.searchSong(
+      `${resultData.songArtist + resultData.songTitle}`
+    )
+
+    return {
+      reply_content,
+      music_url,
+      emotion,
+      music_name: `${resultData.songArtist} - ${resultData.songTitle}`,
     }
   }
 
   private extractResultData(data: any): {
-    content: string
+    reply_content: string
     songArtist: string
     songTitle: string
     emotion: string
@@ -103,17 +132,17 @@ export class ClovaService {
     const songMatch = content.match(
       /추천곡\s*:\s*\{가수:\s*(.*?),\s*노래:\s*(.*?)\}/
     )
-    const emotionMatch = content.match(/요약\s*감정:\s*(.*)/)
+    const emotionMatch = content.match(/요약\s*감정\s:\s*(.*)/)
     const cleanedContent = content
       .replace(/추천곡\s*:\s*\{가수:\s*.*?,\s*노래:\s*.*?\}\n/, "")
-      .replace(/요약\s*감정:\s*.*$/, "")
+      .replace(/요약\s*감정\s:\s*.*$/, "")
 
     const songArtist = songMatch ? songMatch[1] : ""
     const songTitle = songMatch ? songMatch[2] : ""
     const emotion = emotionMatch ? emotionMatch[1] : ""
 
     return {
-      content: cleanedContent,
+      reply_content: cleanedContent,
       songArtist,
       songTitle,
       emotion,
@@ -177,7 +206,7 @@ export class ClovaService {
     \\n\\n네가 원하는 삶이 지금과는 다르다면 잠시 쉬어가도 괜찮아. 
     하지만 절대 포기하지 않았으면 좋겠어. 너라면 분명 이겨낼 수 있을 거야! 화이팅하자 우리! 💪🌟
     추천곡 : {가수: 트와이스, 노래:Feel Special}
-    요약 감정: 피곤해 
+    요약 감정 : 피곤해 
     이형식을 반드시 지켜야 합니다.
   `
 }
