@@ -65,8 +65,20 @@ export class DiaryController {
 
   @Post()
   @UseGuards(JwtGuard)
-  createDiary(@Request() req, @Body() diaryData: CreateDiaryDto) {
-    return this.diaryService.createDiary(req.user.id, diaryData)
+  async createDiary(
+    @Request() req,
+    @Body() diaryData: CreateDiaryDto,
+    @Query("year") year: number,
+    @Query("month") month: number,
+    @Query("day") day: number
+  ) {
+    return this.diaryService.createDiary(
+      req.user.id,
+      diaryData,
+      year,
+      month,
+      day
+    )
   }
 
   @Patch(":id")

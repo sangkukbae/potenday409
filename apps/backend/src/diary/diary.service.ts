@@ -16,16 +16,30 @@ export class DiaryService {
     private readonly clovaService: ClovaService
   ) {}
 
-  async createDiary(userId, diaryData: CreateDiaryDto) {
+  async createDiary(
+    userId,
+    diaryData: CreateDiaryDto,
+    year: number,
+    month: number,
+    day: number
+  ) {
     const user = await this.userService.getUserById(userId)
     const diary = this.diaryRepository.create({ ...diaryData, user })
+
+    if (!(await this.validateDiary(userId, year, month, day))) {
+      throw new BadRequestException(
+        "A diary entry for this date already exists."
+      )
+    }
+
     const { reply_content, music_url, emotion, music_name } =
       await this.clovaService.generateResponse(
         diaryData.title,
         diaryData.character,
         diaryData.content
       )
-    return this.diaryRepository.save({
+
+    return await this.diaryRepository.save({
       ...diary,
       reply_content,
       music_url,
@@ -34,22 +48,13 @@ export class DiaryService {
     })
   }
 
-  async validateDiary(userId) {
-    const today = new Date()
-    const startOfDay = new Date(
-      today.getFullYear(),
-      today.getMonth(),
-      today.getDate()
-    )
-    const endOfDay = new Date(
-      today.getFullYear(),
-      today.getMonth(),
-      today.getDate() + 1
-    )
+  async validateDiary(userId, year: number, month: number, day: number) {
+    const startOfDay = new Date(year, month - 1, day)
+    const endOfDay = new Date(year, month - 1, day + 1)
 
     const diary = await this.diaryRepository.findOne({
       where: {
-        id: userId,
+        user: { id: userId }, // userId로 수정
         create_dt: Between(startOfDay, endOfDay),
       },
     })
