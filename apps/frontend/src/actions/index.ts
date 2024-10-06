@@ -34,7 +34,7 @@ export async function fetchData<T>(
 
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}${url}`,
+      `https://soulfriends.site/api/v1${url}`,
       fetchOptions
     )
 
@@ -83,7 +83,7 @@ export async function updateToken(refreshToken: string): Promise<
 > {
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/user/token-refresh`,
+      `https://soulfriends.site/api/v1/user/token-refresh`,
       {
         method: "POST",
         headers: {

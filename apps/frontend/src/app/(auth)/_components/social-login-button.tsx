@@ -18,7 +18,7 @@ export const SocialLoginButton = ({
       )}
       onClick={() =>
         window.open(
-          `${process.env.NEXT_PUBLIC_API_URL}/auth/to-${provider}`,
+          `https://soulfriends.site/api/v1/auth/to-${provider}`,
           "_self"
         )
       }
