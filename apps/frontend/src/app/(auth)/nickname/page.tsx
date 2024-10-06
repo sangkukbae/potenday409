@@ -1,11 +1,13 @@
 "use client"
 
+import { useRouter } from "next/navigation"
+import { updateNickname } from "@/actions/user"
 import { useAgreements, useNickname } from "@/store/nickname"
 
-import { Agreements } from "../_components/agreements"
 import { BottomButton } from "@/components/bottom-button"
 import { NicknameInput } from "@/components/nickname-input"
-import { useRouter } from "next/navigation"
+
+import { Agreements } from "../_components/agreements"
 
 export default function NicknamePage() {
   const router = useRouter()
@@ -33,7 +35,13 @@ export default function NicknamePage() {
       <BottomButton
         value="다음"
         disabled={!nickname || !isAvailable || !isAgreedAll}
-        action={() => router.push("/nickname/complete")}
+        action={async () => {
+          if (nickname) {
+            await updateNickname(nickname)
+
+            router.push("/nickname/complete")
+          }
+        }}
       />
     </div>
   )

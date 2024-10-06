@@ -67,7 +67,8 @@ export const OnBoardingSlider = () => {
               alt="onboarding"
             />
             <h2 className="font-bold text-[22px] leading-[130%] tracking-[-0.03em] mb-5">
-              소울프렌즈가 내 일기를 분석하고 답장을 드려요
+              소울프렌즈가 내 일기를 분석하고
+              <br /> 답장을 드려요
             </h2>
             <p className="font-medium text-sm text-[#A0A0A0] tracking-[-0.03em] text-center mb-[29px]">
               소울프렌즈가 내 감정을 분석하고 <br />

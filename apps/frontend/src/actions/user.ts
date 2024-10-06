@@ -1,8 +1,9 @@
 "use server"
 
-import { UserInfo } from "@/types"
-import { fetchData } from "./index"
 import { revalidatePath } from "next/cache"
+import { UserInfo } from "@/types"
+
+import { fetchData } from "./index"
 
 export const getUserInfo = async () => await fetchData<UserInfo>("/user/info")
 
