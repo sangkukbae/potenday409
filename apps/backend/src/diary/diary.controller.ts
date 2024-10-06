@@ -21,13 +21,18 @@ export class DiaryController {
 
   @Get("date")
   @UseGuards(JwtGuard)
-  async getDiary(
+  async getDiaryByDate(
     @Request() req,
     @Query("year") year: number,
     @Query("month") month: number,
     @Query("day") day: number
   ) {
     return await this.diaryService.getDiaryByDate(req.user.id, year, month, day)
+  }
+
+  @Get(":id")
+  async getDiary(@Param("id") id: number) {
+    return await this.diaryService.getDiary(id)
   }
 
   @Post()
