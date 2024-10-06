@@ -23,8 +23,8 @@ export class AuthController {
     const { accessToken, refreshToken } =
       await this.authService.googleLogin(user)
 
-    res.cookie("access_token", accessToken, { httpOnly: true, secure: true })
-    res.cookie("refresh_token", refreshToken, { httpOnly: true, secure: true })
+    res.cookie("access_token", accessToken, { secure: true })
+    res.cookie("refresh_token", refreshToken, { secure: true })
 
     if (!user.user_name) {
       return res.redirect("/nickname")
@@ -44,8 +44,8 @@ export class AuthController {
     const { accessToken, refreshToken } =
       await this.authService.kakaoLogin(user)
 
-    res.cookie("access_token", accessToken, { httpOnly: true, secure: true }) // httpOnly 및 secure 설정
-    res.cookie("refresh_token", refreshToken, { httpOnly: true, secure: true }) // httpOnly 및 secure 설정
+    res.cookie("access_token", accessToken, { secure: true }) // httpOnly 및 secure 설정
+    res.cookie("refresh_token", refreshToken, { secure: true }) // httpOnly 및 secure 설정
 
     if (!user.user_name) {
       return res.redirect("/nickname")

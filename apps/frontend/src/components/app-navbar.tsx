@@ -1,18 +1,19 @@
 import { usePathname, useRouter } from "next/navigation"
 
+import { COOKIE_KEY } from "@/constants"
+import Cookies from "js-cookie"
 import { Icon } from "@/components/icon"
 import { Icons } from "./ui/icons"
 import { cn } from "@/lib/utils"
 import { useAlert } from "@/store/alert"
-import { useAuth } from "@/store/auth"
 
 export const AppNavbar = () => {
   const path = usePathname()
   const router = useRouter()
 
-  const { token } = useAuth((state) => state)
+  const accessToken = Cookies.get(COOKIE_KEY.ACCESS_TOKEN)
 
-  const isLogin = !!token
+  const isLogin = !!accessToken
 
   const { setAlert } = useAlert()
 
