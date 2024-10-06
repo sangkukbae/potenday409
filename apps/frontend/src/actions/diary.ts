@@ -1,8 +1,9 @@
 "use server"
 
 import { Diary } from "@/types"
-import { fetchData } from "."
 import qs from "query-string"
+
+import { fetchData } from "."
 
 interface CalendarDiary {
   diaries: Diary[]

@@ -1,7 +1,8 @@
-import { Button } from "@/components/ui/button"
-import { Icons } from "@/components/ui/icons"
 import Link from "next/link"
 import { getUserInfo } from "@/actions/user"
+
+import { Button } from "@/components/ui/button"
+import { Icons } from "@/components/ui/icons"
 
 export default async function MypagePage() {
   const userInfo = await getUserInfo()
