@@ -9,6 +9,15 @@ export class CreateDiaryDto {
 
   @IsNotEmpty()
   character: string
+
+  @IsNotEmpty()
+  year: number
+
+  @IsNotEmpty()
+  month: number
+
+  @IsNotEmpty()
+  day: number
 }
 
 export class UpdateDiaryDto {
