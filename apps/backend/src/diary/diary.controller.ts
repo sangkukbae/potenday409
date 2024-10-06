@@ -19,6 +19,17 @@ import { DiaryService } from "./diary.service"
 export class DiaryController {
   constructor(private readonly diaryService: DiaryService) {}
 
+  @Get()
+  @UseGuards(JwtGuard)
+  async getDiary(
+    @Request() req,
+    @Query("year") year: number,
+    @Query("month") month: number,
+    @Query("day") day: number
+  ) {
+    return await this.diaryService.getDiaryByDate(req.user.id, year, month, day)
+  }
+
   @Post()
   @UseGuards(JwtGuard)
   createDiary(@Request() req, @Body() diaryData: CreateDiaryDto) {
@@ -40,11 +51,16 @@ export class DiaryController {
   async findDiary(
     @Request() req,
     @Query("sort") sort: string, // sort 쿼리 파라미터 (recent, old, like 가능)
-    @Query("limit") limit: number = 15
+    @Query("limit") limit: number,
+    @Query("page") page: number
   ) {
     const sortArray = sort ? sort.split(",") : ["recent"]
-    const result = await this.diaryService.find(req.user.id, sortArray, limit)
-    console.log(result)
+    const result = await this.diaryService.find(
+      req.user.id,
+      sortArray,
+      limit,
+      page
+    )
     return result
   }
 
