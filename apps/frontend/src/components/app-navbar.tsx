@@ -4,12 +4,16 @@ import { Icon } from "@/components/icon"
 import { Icons } from "./ui/icons"
 import { cn } from "@/lib/utils"
 import { useAlert } from "@/store/alert"
+import { useAuth } from "@/store/auth"
 
 export const AppNavbar = () => {
   const path = usePathname()
   const router = useRouter()
 
-  const isLogin = false
+  const { token } = useAuth((state) => state)
+
+  const isLogin = !!token
+
   const { setAlert } = useAlert()
 
   if (path !== "/diary" && path !== "/diary/list" && path !== "/mypage") {
