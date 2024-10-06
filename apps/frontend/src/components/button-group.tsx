@@ -1,19 +1,17 @@
 "use client"
 
-import { useState } from "react"
-import { usePathname, useRouter } from "next/navigation"
-import { removeDiary, updateLike } from "@/actions/diary"
-import { useAlert } from "@/store/alert"
-import { useDiary } from "@/store/diary"
-
-import { cn } from "@/lib/utils"
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
+import { removeDiary, updateLike } from "@/actions/diary"
+import { usePathname, useRouter } from "next/navigation"
 
 import { Icons } from "./ui/icons"
+import { cn } from "@/lib/utils"
+import { useAlert } from "@/store/alert"
+import { useState } from "react"
 
 type ButtonGroupProps = {
   className?: string
@@ -28,15 +26,12 @@ export const ButtonGroup = ({
   id,
   heart,
 }: ButtonGroupProps) => {
-  const [liked, setLiked] = useState(heart === 1 ? true : false)
+  const [liked, setLiked] = useState(!!heart)
 
   const path = usePathname()
   const router = useRouter()
 
   const { setAlert } = useAlert()
-  const { title, content } = useDiary((state) => state)
-  console.log("content:", content)
-  console.log("title:", title)
 
   const diaryDetailRegex = /^\/diary\/[^/]+$/
 
@@ -45,7 +40,7 @@ export const ButtonGroup = ({
       <div
         onClick={() => {
           setLiked(!liked)
-          updateLike({ diaryId: id, isLike: liked === true ? 1 : 0 })
+          updateLike({ diaryId: id, isLike: liked === true ? 0 : 1 })
         }}
       >
         {liked ? (

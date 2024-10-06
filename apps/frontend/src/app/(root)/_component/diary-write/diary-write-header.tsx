@@ -1,17 +1,19 @@
 "use client"
 
-import { Icons } from "@/components/ui/icons"
-import { cn } from "@/lib/utils"
-import { format } from "date-fns"
-import { ko } from "date-fns/locale"
+import { useRouter } from "next/navigation"
 import { useAlert } from "@/store/alert"
 import { useDiary } from "@/store/diary"
-import { useRouter } from "next/navigation"
+import { format } from "date-fns"
+import { ko } from "date-fns/locale"
+
+import { cn } from "@/lib/utils"
+import { Icons } from "@/components/ui/icons"
 
 export const DiaryWriteHeader = ({ className }: { className?: string }) => {
   const { clear, date } = useDiary((state) => state)
   const router = useRouter()
   const { setAlert } = useAlert()
+
   return (
     <div className={cn("relative pt-[60px]", className)}>
       <div className="flex justify-center pb-[18px]">

@@ -1,18 +1,19 @@
 "use client"
 
 import * as React from "react"
-import Image from "next/image"
-import { useRouter } from "next/navigation"
-import { EMOTION_ICON, SOUL_FRIENDS_ICON } from "@/constants"
-import { Diary } from "@/types"
-import { ChevronLeftIcon, ChevronRightIcon } from "@radix-ui/react-icons"
-import { isSameDay } from "date-fns"
-import { DayPicker, useDayRender } from "react-day-picker"
 
-import { cn } from "@/lib/utils"
-import { buttonVariants } from "@/components/ui/button"
+import { ChevronLeftIcon, ChevronRightIcon } from "@radix-ui/react-icons"
+import { DayPicker, useDayRender } from "react-day-picker"
+import { EMOTION_ICON, SOUL_FRIENDS_ICON } from "@/constants"
+
+import { Diary } from "@/types"
+import Image from "next/image"
 import PlusOffIcon from "@/app/assets/icons/ico_plus_off.svg"
 import PlusOnIcon from "@/app/assets/icons/ico_plus_on.svg"
+import { buttonVariants } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
+import { isSameDay } from "date-fns"
+import { useRouter } from "next/navigation"
 
 export type CalendarProps = React.ComponentProps<typeof DayPicker>
 
@@ -24,8 +25,6 @@ function Calendar({
   type,
   ...props
 }: CalendarProps & { items: Diary[]; type: "emotion" | "friends" }) {
-  console.log("items:", items)
-
   const router = useRouter()
   return (
     <DayPicker
@@ -88,11 +87,7 @@ function Calendar({
 
           // const hasDiary = true
 
-          const sameDay = items.find((item) => isSameDay(item.create_dt, date))
-
-          if (type === "friends") {
-            console.log("sameDay:", sameDay)
-          }
+          const sameDay = items.find((item) => isSameDay(item.save_dt, date))
 
           return (
             <div className="flex flex-col items-center gap-y-[7px]">

@@ -13,8 +13,13 @@ export const useNickname = create<{
 
 export const useAgreements = create<{
   isAgreedAll: boolean
+  isRequiredChecked: boolean
   setAgreedAll: (isAgreedAll: boolean) => void
+  setRequiredChecked: (isRequiredChecked: boolean) => void
 }>((set) => ({
   isAgreedAll: false,
+  isRequiredChecked: false,
   setAgreedAll: (isAgreedAll: boolean) => set({ isAgreedAll }),
+  setRequiredChecked: (isRequiredChecked: boolean) =>
+    set({ isRequiredChecked }),
 }))

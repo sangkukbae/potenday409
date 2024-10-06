@@ -1,17 +1,22 @@
 "use client"
 
-import { Icon } from "@/components/icon"
+import { useEffect, useState } from "react"
 import { SOUL_FRIENDS } from "@/constants"
-import { cn } from "@/lib/utils"
 import { useDiary } from "@/store/diary"
-import { useState } from "react"
+
+import { cn } from "@/lib/utils"
+import { Icon } from "@/components/icon"
 
 export const SelectFriends = () => {
-  const [selected, setSelected] = useState("bestFriend")
+  const [selected, setSelected] = useState("단짝이")
 
   const { setCharacter } = useDiary((state) => state)
 
   const currentFriend = SOUL_FRIENDS.find((item) => item.name === selected)
+
+  useEffect(() => {
+    setCharacter(selected)
+  }, [selected, setCharacter])
 
   return (
     <div className="pt-6 px-[18px] flex flex-col items-center w-full md:max-w-[500px] mx-auto">
@@ -24,7 +29,6 @@ export const SelectFriends = () => {
             key={item.name}
             onClick={() => {
               setSelected(item.name)
-              setCharacter(item.text)
             }}
           >
             <Icon
@@ -33,7 +37,7 @@ export const SelectFriends = () => {
                 selected === item.name ? "text-[#333333]" : "text-[#c3c3c3]"
               )}
               icon={selected === item.name ? item.icon.on : item.icon.off}
-              text={item.text}
+              text={item.name}
             />
           </li>
         ))}

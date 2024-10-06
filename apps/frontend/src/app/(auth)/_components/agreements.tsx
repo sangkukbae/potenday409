@@ -1,18 +1,18 @@
 "use client"
 
+import { useEffect, useState } from "react"
+import { useAgreements } from "@/store/nickname"
+
 import {
   Accordion,
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
 } from "@/components/ui/accordion"
-import { useEffect, useState } from "react"
-
 import { Icons } from "@/components/ui/icons"
-import { PrivacyPolicy } from "@/components/privacy-policy"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import { PrivacyPolicy } from "@/components/privacy-policy"
 import { TermsAndService } from "@/components/terms-condition"
-import { useAgreements } from "@/store/nickname"
 
 export const Agreements = () => {
   const [checkedAll, setCheckedAll] = useState(false)
@@ -20,17 +20,20 @@ export const Agreements = () => {
   const [privacy, setPrivacy] = useState(false)
   const [marketing, setMarketing] = useState(false)
 
-  const { setAgreedAll } = useAgreements()
+  const { setAgreedAll, setRequiredChecked } = useAgreements()
 
   // Effect to synchronize "Select All" with individual checkboxes
   useEffect(() => {
-    if (terms && privacy && marketing) {
-      setCheckedAll(true)
-      setAgreedAll(true)
-    } else {
-      setCheckedAll(false)
-    }
-  }, [terms, privacy, marketing, setAgreedAll])
+    const allChecked = terms && privacy && marketing
+    const requiredOnlyChecked = terms && privacy
+
+    // Update "Select All" and "Agreed All" based on all checkboxes
+    setCheckedAll(allChecked)
+    setAgreedAll(allChecked)
+
+    // Update "Required Checked" if only required checkboxes are checked
+    setRequiredChecked(!allChecked && requiredOnlyChecked)
+  }, [terms, privacy, marketing, setAgreedAll, setRequiredChecked])
 
   // Handler for "Select All" checkbox
   const handleCheckAll = () => {

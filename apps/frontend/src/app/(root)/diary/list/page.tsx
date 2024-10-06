@@ -1,14 +1,14 @@
-import { notFound } from "next/navigation"
-import { getDiaryList } from "@/actions/diary"
-
 import { DiaryListHeader } from "../../_component/diary-list/diary-list-header"
 import { DiaryListItem } from "../../_component/diary-list/diary-list-item"
+import { getDiaryList } from "@/actions/diary"
+import { notFound } from "next/navigation"
 
 // import { Pagination } from "@/components/pagination"
 
+export const dynamic = "force-dynamic"
+
 export default async function DiaryListPage() {
   const data = await getDiaryList({ sort: "recent", limit: 10, page: 1 })
-  console.log("data:", data)
 
   if (!data) {
     return notFound()

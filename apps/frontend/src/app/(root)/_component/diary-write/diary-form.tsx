@@ -9,11 +9,15 @@ import { useState } from "react"
 
 export const DiaryForm = () => {
   const [isLoading, setIsLoading] = useState(false)
-  const { title, content, character, setTitle, setContent } = useDiary(
+  const { date, title, content, character, setTitle, setContent } = useDiary(
     (state) => state
   )
-
   const router = useRouter()
+
+  const isButtonDisabled =
+    (!character && !title && !content) ||
+    (!!character && !!title && !!content && isLoading)
+
   return (
     <div className="relative w-full md:max-w-[500px] mx-auto">
       <form className="" action="">
@@ -50,13 +54,16 @@ export const DiaryForm = () => {
               )}
             </div>
           }
-          disabled={!title || !content}
+          disabled={isButtonDisabled}
           action={async () => {
             setIsLoading(true)
             const result = await addDiary({
               title,
               content,
               character,
+              year: date.getFullYear(),
+              month: date.getMonth() + 1,
+              day: date.getDate(),
             })
             if (result) {
               router.push(`/diary/${result.id}`)

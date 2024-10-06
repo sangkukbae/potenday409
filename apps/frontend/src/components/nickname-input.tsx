@@ -1,11 +1,12 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { checkExistedNickname } from "@/actions/user"
+import { useNickname } from "@/store/nickname"
+
+import { cn } from "@/lib/utils"
 
 import { Input } from "./ui/input"
-import { checkExistedNickname } from "@/actions/user"
-import { cn } from "@/lib/utils"
-import { useNickname } from "@/store/nickname"
 
 type NicknameInputProps = {
   className?: string
@@ -36,6 +37,7 @@ export const NicknameInput = ({ className }: NicknameInputProps) => {
         }
       } catch (error) {
         console.error(`Error checking nickname: ${error}`)
+      } finally {
       }
     }, 1000)
 

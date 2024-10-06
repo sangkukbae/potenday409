@@ -13,7 +13,10 @@ export default function NicknamePage() {
   const router = useRouter()
 
   const { nickname, isAvailable } = useNickname((state) => state)
-  const { isAgreedAll } = useAgreements((state) => state)
+  const { isAgreedAll, isRequiredChecked } = useAgreements((state) => state)
+
+  const isButtonEnabled =
+    !!nickname && isAvailable && (isRequiredChecked || isAgreedAll)
 
   return (
     <div className="mt-[120px] px-[30px] w-full md:max-w-[500px] md:px-0 mx-auto">
@@ -34,7 +37,7 @@ export default function NicknamePage() {
       <Agreements />
       <BottomButton
         value="다음"
-        disabled={!nickname || !isAvailable || !isAgreedAll}
+        disabled={!isButtonEnabled}
         action={async () => {
           if (nickname) {
             await updateNickname(nickname)

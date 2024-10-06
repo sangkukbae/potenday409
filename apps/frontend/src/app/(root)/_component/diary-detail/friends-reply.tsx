@@ -4,13 +4,13 @@ import { Icons } from "@/components/ui/icons"
 import { SOUL_FRIENDS } from "@/constants"
 import { YoutubeButton } from "@/components/youtube-button"
 import { cn } from "@/lib/utils"
-import { useNickname } from "@/store/nickname"
 
 type friendsreplyprops = {
   character: string
   reply: string
   youtubeUrl: string
   trackInfo: string
+  nickname: string
 }
 
 export const FriendsReply = ({
@@ -18,16 +18,15 @@ export const FriendsReply = ({
   reply,
   youtubeUrl,
   trackInfo,
+  nickname,
 }: friendsreplyprops) => {
-  const friends = SOUL_FRIENDS.find((item) => item.text === character)
+  const friends = SOUL_FRIENDS.find((item) => item.name === character)
 
   const { name, color, bgColor } = friends || {
     name: "",
     color: "#80CFEE",
     bgColor: "#EBF8FD",
   }
-
-  const { nickname } = useNickname((state) => state)
 
   return (
     <div
