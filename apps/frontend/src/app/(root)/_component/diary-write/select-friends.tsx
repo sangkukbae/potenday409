@@ -1,16 +1,15 @@
 "use client"
 
 import { useEffect, useState } from "react"
+
+import { Icon } from "@/components/icon"
 import { SOUL_FRIENDS } from "@/constants"
+import { cn } from "@/lib/utils"
 import { useDiary } from "@/store/diary"
 
-import { cn } from "@/lib/utils"
-import { Icon } from "@/components/icon"
-
 export const SelectFriends = () => {
-  const [selected, setSelected] = useState("단짝이")
-
-  const { setCharacter } = useDiary((state) => state)
+  const { setCharacter, character } = useDiary((state) => state)
+  const [selected, setSelected] = useState(character || "단짝이")
 
   const currentFriend = SOUL_FRIENDS.find((item) => item.name === selected)
 
