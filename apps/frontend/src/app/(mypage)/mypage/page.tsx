@@ -3,6 +3,7 @@ import { getUserInfo } from "@/actions/user"
 
 import { Button } from "@/components/ui/button"
 import { Icons } from "@/components/ui/icons"
+import { SignOutButton } from "@/components/sign-out-button"
 
 export default async function MypagePage() {
   const userInfo = await getUserInfo()
@@ -67,6 +68,8 @@ export default async function MypagePage() {
           </li>
         </Link>
       </ul>
+
+      <SignOutButton />
     </div>
   )
 }

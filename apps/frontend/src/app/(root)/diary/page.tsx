@@ -17,8 +17,6 @@ export default async function DiaryPage({
     month: month || defaultMonth.toString(),
   })
 
-  console.log("data:", JSON.stringify(data))
-
   return (
     <div className="pt-[60px] flex flex-col items-center">
       <DiaryHeader
