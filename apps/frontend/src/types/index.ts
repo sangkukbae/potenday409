@@ -44,5 +44,6 @@ export interface Diary {
   heart: number
   update_dt: string | null // ISO date string or null
   id: number
-  create_dt: string // ISO date string
+  create_dt: string // ISO date string ('2024-10-06T12:12:08.000Z')
+  save_dt: string //2024-10-01T15:00:00.000Z'
 }

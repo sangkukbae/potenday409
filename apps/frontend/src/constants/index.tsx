@@ -4,8 +4,7 @@ import { Icons } from "@/components/ui/icons"
 
 export const SOUL_FRIENDS = [
   {
-    name: "bestFriend",
-    text: "단짝이",
+    name: "단짝이",
     icon: {
       on: <Icons.bestFriendS />,
       off: <Icons.bestFriendD />,
@@ -15,8 +14,7 @@ export const SOUL_FRIENDS = [
     bgColor: "#FFFBEA",
   },
   {
-    name: "cozy",
-    text: "포근이",
+    name: "포근이",
     icon: {
       on: <Icons.cozyS />,
       off: <Icons.cozyD />,
@@ -26,8 +24,7 @@ export const SOUL_FRIENDS = [
     bgColor: "#EBF8FD",
   },
   {
-    name: "passion",
-    text: "열정이",
+    name: "열정이",
     icon: {
       on: <Icons.passionS />,
       off: <Icons.passionD />,
@@ -37,8 +34,7 @@ export const SOUL_FRIENDS = [
     bgColor: "#FFF1F1",
   },
   {
-    name: "calm",
-    text: "차분이",
+    name: "차분이",
     icon: {
       on: <Icons.calmS />,
       off: <Icons.calmD />,

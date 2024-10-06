@@ -56,7 +56,7 @@ export const DiaryCalendar = ({ items }: { items: Diary[] }) => {
             if (val === undefined) {
               if (date) {
                 const sameDay = items.find((item) =>
-                  isSameDay(item.create_dt, date)
+                  isSameDay(item.save_dt, date)
                 )
                 if (!sameDay) {
                   clear()
@@ -98,7 +98,7 @@ export const DiaryCalendar = ({ items }: { items: Diary[] }) => {
             if (val === undefined) {
               if (date) {
                 const sameDay = items.find((item) =>
-                  isSameDay(item.create_dt, date)
+                  isSameDay(item.save_dt, date)
                 )
                 if (!sameDay) {
                   clear()

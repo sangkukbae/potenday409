@@ -4,13 +4,15 @@ import { Icons } from "@/components/ui/icons"
 import { SOUL_FRIENDS } from "@/constants"
 import { YoutubeButton } from "@/components/youtube-button"
 import { cn } from "@/lib/utils"
-import { useNickname } from "@/store/nickname"
+import { useDiary } from "@/store/diary"
+import { useEffect } from "react"
 
 type friendsreplyprops = {
   character: string
   reply: string
   youtubeUrl: string
   trackInfo: string
+  nickname: string
 }
 
 export const FriendsReply = ({
@@ -18,8 +20,11 @@ export const FriendsReply = ({
   reply,
   youtubeUrl,
   trackInfo,
+  nickname,
 }: friendsreplyprops) => {
-  const friends = SOUL_FRIENDS.find((item) => item.text === character)
+  const { setCharacter } = useDiary((state) => state)
+
+  const friends = SOUL_FRIENDS.find((item) => item.name === character)
 
   const { name, color, bgColor } = friends || {
     name: "",
@@ -27,7 +32,9 @@ export const FriendsReply = ({
     bgColor: "#EBF8FD",
   }
 
-  const { nickname } = useNickname((state) => state)
+  useEffect(() => {
+    setCharacter(character)
+  }, [character, setCharacter])
 
   return (
     <div

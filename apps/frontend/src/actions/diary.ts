@@ -1,10 +1,9 @@
 "use server"
 
-import { revalidatePath } from "next/cache"
 import { Diary } from "@/types"
-import qs from "query-string"
-
 import { fetchData } from "."
+import qs from "query-string"
+import { revalidatePath } from "next/cache"
 
 interface CalendarDiary {
   diaries: Diary[]
@@ -17,6 +16,15 @@ interface DiaryList {
   page: number
   totalPage: number
   totalCount: number
+}
+
+interface AddDiary {
+  title: string
+  character: string
+  content: string
+  year: number
+  month: number
+  day: number
 }
 
 export const getCalendarDiary = async ({
@@ -67,23 +75,11 @@ export const getDiary = async (diaryId: number): Promise<Diary | null> => {
   }
 }
 
-export const addDiary = async ({
-  title,
-  character,
-  content,
-}: {
-  title: string
-  character: string
-  content: string
-}) => {
+export const addDiary = async (params: AddDiary) => {
   try {
     const data = await fetchData<Diary>("/diary", {
       method: "POST",
-      body: {
-        title,
-        character,
-        content,
-      },
+      body: params,
     })
 
     return data

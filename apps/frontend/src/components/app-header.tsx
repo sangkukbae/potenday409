@@ -7,13 +7,13 @@ import { format } from "date-fns"
 import { ko } from "date-fns/locale"
 import { useRouter } from "next/navigation"
 
-export const AppHeader = ({
-  date,
-  diaryId,
-}: {
+type AppHeaderProps = {
   date: string
   diaryId: number
-}) => {
+  heart: number
+}
+
+export const AppHeader = ({ date, diaryId, heart }: AppHeaderProps) => {
   const router = useRouter()
 
   return (
@@ -28,7 +28,12 @@ export const AppHeader = ({
         {format(convertKRDate(date), "M월 d일 EEEE", { locale: ko })}
       </div>
 
-      <ButtonGroup className="absolute right-[12px]" size="md" id={diaryId} />
+      <ButtonGroup
+        className="absolute right-[12px]"
+        size="md"
+        id={diaryId}
+        heart={heart}
+      />
     </div>
   )
 }
