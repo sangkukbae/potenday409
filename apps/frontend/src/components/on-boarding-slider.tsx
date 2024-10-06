@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react"
 import Image from "next/image"
+import Autoplay from "embla-carousel-autoplay"
 
 import { cn } from "@/lib/utils"
 import {
@@ -34,7 +35,15 @@ export const OnBoardingSlider = () => {
 
   return (
     <div className="grid place-items-center">
-      <Carousel setApi={setApi} className="w-full">
+      <Carousel
+        className="w-full"
+        setApi={setApi}
+        plugins={[
+          Autoplay({
+            delay: 2000,
+          }),
+        ]}
+      >
         <CarouselContent>
           {/* onboarding 01 */}
           <CarouselItem className="mt-[120px] flex flex-col items-center justify-center cursor-pointer">
