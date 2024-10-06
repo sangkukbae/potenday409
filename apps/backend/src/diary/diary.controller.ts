@@ -30,25 +30,19 @@ export class DiaryController {
     return await this.diaryService.getDiaryByDate(req.user.id, year, month, day)
   }
 
+  @Get("multiple")
+  @UseGuards(JwtGuard)
+  findMultiple(
+    @Request() req,
+    @Query("year") year: number,
+    @Query("month") month: number
+  ) {
+    return this.diaryService.findMultiple({ userId: req.user.id, year, month })
+  }
+
   @Get(":id")
   async getDiary(@Param("id") id: number) {
     return await this.diaryService.getDiary(id)
-  }
-
-  @Post()
-  @UseGuards(JwtGuard)
-  createDiary(@Request() req, @Body() diaryData: CreateDiaryDto) {
-    return this.diaryService.createDiary(req.user.id, diaryData)
-  }
-
-  @Patch(":id")
-  updateDiary(@Param("id") id: number, @Body() updateData: UpdateDiaryDto) {
-    return this.diaryService.updateDiary(id, updateData)
-  }
-
-  @Delete(":id")
-  deleteDiary(@Param("id") id: number) {
-    return this.diaryService.deleteDiary(id)
   }
 
   @Get()
@@ -69,18 +63,24 @@ export class DiaryController {
     return result
   }
 
-  @Get("multiple")
+  @Post()
   @UseGuards(JwtGuard)
-  findMultiple(
-    @Request() req,
-    @Query("year") year: number,
-    @Query("month") month: number
-  ) {
-    return this.diaryService.findMultiple({ userId: req.user.id, year, month })
+  createDiary(@Request() req, @Body() diaryData: CreateDiaryDto) {
+    return this.diaryService.createDiary(req.user.id, diaryData)
+  }
+
+  @Patch(":id")
+  updateDiary(@Param("id") id: number, @Body() updateData: UpdateDiaryDto) {
+    return this.diaryService.updateDiary(id, updateData)
   }
 
   @Patch(":id/update-heart")
   updateDiaryHeart(@Param("id") id: number, @Query("heart") heart: number) {
     return this.diaryService.updateDiaryHeart(id, heart)
+  }
+
+  @Delete(":id")
+  deleteDiary(@Param("id") id: number) {
+    return this.diaryService.deleteDiary(id)
   }
 }
