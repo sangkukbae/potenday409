@@ -5,6 +5,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Calendar } from "@/components/ui/calendar"
 import { ko } from "date-fns/locale"
 import { useDiary } from "@/store/diary"
+import { useMonth } from "@/store/calendar"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 
@@ -13,6 +14,7 @@ export const DiaryCalendar = () => {
   const { setDate: setDateStore } = useDiary((state) => state)
 
   const router = useRouter()
+  const { month } = useMonth((state) => state)
 
   return (
     <Tabs className="" defaultValue="emotion">
@@ -59,6 +61,7 @@ export const DiaryCalendar = () => {
             date > new Date() || date < new Date("1900-01-01")
           }
           locale={ko}
+          month={month}
         />
       </TabsContent>
       <TabsContent value="friends">
@@ -89,6 +92,7 @@ export const DiaryCalendar = () => {
             date > new Date() || date < new Date("1900-01-01")
           }
           locale={ko}
+          month={month}
         />
       </TabsContent>
     </Tabs>
