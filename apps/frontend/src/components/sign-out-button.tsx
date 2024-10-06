@@ -2,8 +2,10 @@
 
 import { COOKIE_KEY } from "@/constants"
 import Cookies from "js-cookie"
+import { useAuth } from "@/store/auth"
 
 export const SignOutButton = () => {
+  const { clear } = useAuth()
   return (
     <div className="fixed bottom-[110px] left-1/2 -translate-x-1/2">
       <button
@@ -12,7 +14,9 @@ export const SignOutButton = () => {
           Cookies.remove(COOKIE_KEY.ACCESS_TOKEN)
           Cookies.remove(COOKIE_KEY.REFRESH_TOKEN)
 
-          window.location.href = "/diary"
+          clear()
+
+          window.location.reload()
         }}
       >
         로그아웃
