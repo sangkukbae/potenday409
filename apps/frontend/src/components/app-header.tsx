@@ -6,7 +6,13 @@ import { formatKRDate } from "@/lib/utils"
 import { useAlert } from "@/store/alert"
 import { useRouter } from "next/navigation"
 
-export const AppHeader = ({ date }: { date: string }) => {
+export const AppHeader = ({
+  date,
+  diaryId,
+}: {
+  date: string
+  diaryId: number
+}) => {
   const { setAlert } = useAlert()
   const router = useRouter()
   const isEditing = true
@@ -31,7 +37,7 @@ export const AppHeader = ({ date }: { date: string }) => {
         {formatKRDate(date)}
       </div>
 
-      <ButtonGroup className="absolute right-[12px]" size="md" />
+      <ButtonGroup className="absolute right-[12px]" size="md" id={diaryId} />
     </div>
   )
 }

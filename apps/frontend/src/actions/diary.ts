@@ -54,3 +54,38 @@ export const getDiaryList = async ({
     return null
   }
 }
+
+export const updateLike = async ({
+  diaryId,
+  isLike,
+}: {
+  diaryId: number
+  isLike: number
+}) => {
+  try {
+    const data = await fetchData(
+      `/diary/${diaryId}/update-heart?${qs.stringify({ heart: isLike })}`,
+      {
+        method: "PATCH",
+      }
+    )
+
+    return data
+  } catch (error) {
+    console.error(`Error updating like: ${error}`)
+    return null
+  }
+}
+
+export const removeDiary = async (diaryId: number) => {
+  try {
+    const data = await fetchData(`/diary/${diaryId}`, {
+      method: "DELETE",
+    })
+
+    return data
+  } catch (error) {
+    console.error(`Error removing diary: ${error}`)
+    return null
+  }
+}

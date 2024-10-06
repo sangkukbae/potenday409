@@ -5,25 +5,42 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
+import { removeDiary, updateLike } from "@/actions/diary"
+import { usePathname, useRouter } from "next/navigation"
 
 import { Icons } from "./ui/icons"
 import { cn } from "@/lib/utils"
 import { useAlert } from "@/store/alert"
+import { useDiary } from "@/store/diary"
 import { useState } from "react"
 
 type ButtonGroupProps = {
   className?: string
   size?: "sm" | "md" | "lg"
+  id: number
 }
 
-export const ButtonGroup = ({ className, size }: ButtonGroupProps) => {
+export const ButtonGroup = ({ className, size, id }: ButtonGroupProps) => {
   const [liked, setLiked] = useState(false)
 
+  const path = usePathname()
+  const router = useRouter()
+
   const { setAlert } = useAlert()
+  const { title, content } = useDiary((state) => state)
+  console.log("content:", content)
+  console.log("title:", title)
+
+  const diaryDetailRegex = /^\/diary\/[^/]+$/
 
   return (
     <div className={cn("flex gap-x-3", className)}>
-      <div className="" onClick={() => setLiked(!liked)}>
+      <div
+        onClick={() => {
+          setLiked(!liked)
+          updateLike({ diaryId: id, isLike: liked === true ? 1 : 0 })
+        }}
+      >
         {liked ? (
           <Icons.likeOn
             className={cn(
@@ -53,7 +70,12 @@ export const ButtonGroup = ({ className, size }: ButtonGroupProps) => {
           className="w-[70px] rounded-[12px] bg-white p-[6px] flex flex-col items-center shadow-[0px_2px_12px_0px_rgba(0,0,0,0.15)]"
           align="end"
         >
-          <button className="w-full py-[10px] block font-medium text-sm tracking-[-0.02em] text-[#333333] cursor-pointer">
+          <button
+            className="w-full py-[10px] block font-medium text-sm tracking-[-0.02em] text-[#333333] cursor-pointer"
+            onClick={() => {
+              router.push(`/diary/write?id=${id}`)
+            }}
+          >
             수정
           </button>
           <hr className="w-12 h-[1px] bg-[#ebebeb]" />
@@ -66,7 +88,15 @@ export const ButtonGroup = ({ className, size }: ButtonGroupProps) => {
                 description: "삭제한 일기는 복원할 수 없어요",
                 cancelName: "취소",
                 confirmName: "삭제",
-                confirmAction: () => console.log("delete"),
+                confirmAction: async () => {
+                  await removeDiary(id)
+
+                  if (diaryDetailRegex.test(path)) {
+                    router.replace("/diary")
+                  } else {
+                    router.refresh()
+                  }
+                },
               })
             }
           >

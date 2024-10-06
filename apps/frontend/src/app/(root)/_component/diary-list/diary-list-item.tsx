@@ -1,13 +1,13 @@
 "use client"
 
-import Link from "next/link"
-import { useRouter } from "next/navigation"
-import { SOUL_FRIENDS_CARD_COLOR } from "@/constants"
 import { EmotionType, FriendType } from "@/types"
 
 import { ButtonGroup } from "@/components/button-group"
 import { EmotionFriendButton } from "@/components/emotion-friend-button"
+import Link from "next/link"
+import { SOUL_FRIENDS_CARD_COLOR } from "@/constants"
 import { YoutubeButton } from "@/components/youtube-button"
+import { useRouter } from "next/navigation"
 
 export const DiaryListItem = ({
   emotion,
@@ -44,6 +44,7 @@ export const DiaryListItem = ({
       <ButtonGroup
         className="absolute right-[36px] bottom-5 size-5 gap-x-2"
         size="sm"
+        id={1} // TODO: diaryId
       />
       <EmotionFriendButton
         className="absolute top-4 right-4"

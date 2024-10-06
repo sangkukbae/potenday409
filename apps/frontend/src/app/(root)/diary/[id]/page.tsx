@@ -22,7 +22,7 @@ export default async function DiaryDetailPage({
 
   return (
     <div className="flex flex-col items-center px-5 mb-[60px]">
-      <AppHeader date={diary?.create_dt ?? ""} />
+      <AppHeader diaryId={diary?.id || 0} date={diary?.create_dt ?? ""} />
       <MyEmotion />
       <MyDiary title={diary?.title || ""} content={diary?.content || ""} />
       <FriendsReply
