@@ -1,5 +1,6 @@
 "use server"
 
+import { revalidatePath } from "next/cache"
 import { Diary } from "@/types"
 import qs from "query-string"
 
@@ -106,6 +107,7 @@ export const updateLike = async ({
       }
     )
 
+    revalidatePath(`/diary/${diaryId}`)
     return data
   } catch (error) {
     console.error(`Error updating like: ${error}`)

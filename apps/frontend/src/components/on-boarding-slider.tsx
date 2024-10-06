@@ -66,7 +66,7 @@ export const OnBoardingSlider = () => {
               height={284}
               alt="onboarding"
             />
-            <h2 className="font-bold text-[22px] leading-[130%] tracking-[-0.03em] mb-5">
+            <h2 className="font-bold text-[22px] leading-[130%] tracking-[-0.03em] mb-5 text-center">
               소울프렌즈가 내 일기를 분석하고
               <br /> 답장을 드려요
             </h2>
