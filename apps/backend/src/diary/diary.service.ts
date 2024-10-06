@@ -17,10 +17,6 @@ export class DiaryService {
   ) {}
 
   async createDiary(userId, diaryData: CreateDiaryDto) {
-    if (!(await this.validateDiary(userId))) {
-      throw new BadRequestException("User Diary already exists")
-    }
-
     const user = await this.userService.getUserById(userId)
     const diary = this.diaryRepository.create({ ...diaryData, user })
     const { reply_content, music_url, emotion, music_name } =
