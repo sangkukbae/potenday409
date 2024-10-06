@@ -1,4 +1,4 @@
-import { EmotionType, FriendType } from "@/types"
+// import { EmotionType, FriendType } from "@/types"
 
 import { Icons } from "@/components/ui/icons"
 
@@ -57,29 +57,63 @@ export const SOUL_FRIENDS_CARD_COLOR = {
 }
 
 export const SOUL_FRIENDS_ICON: Record<
-  FriendType,
-  (props: { className: string }) => JSX.Element
+  string,
+  (props: { className: string; onClick?: () => void }) => JSX.Element
 > = {
-  bestFriend: (props: { className: string }) => (
+  단짝이: (props: { className: string; onClick?: () => void }) => (
     <Icons.bestFriendS {...props} />
   ),
-  cozy: (props: { className: string }) => <Icons.cozyS {...props} />,
-  passion: (props: { className: string }) => <Icons.passionS {...props} />,
-  calm: (props: { className: string }) => <Icons.calmS {...props} />,
+  포근이: (props: { className: string; onClick?: () => void }) => (
+    <Icons.cozyS {...props} />
+  ),
+  열정이: (props: { className: string; onClick?: () => void }) => (
+    <Icons.passionS {...props} />
+  ),
+  차분이: (props: { className: string; onClick?: () => void }) => (
+    <Icons.calmS {...props} />
+  ),
 }
 
 export const EMOTION_ICON: Record<
-  EmotionType,
-  (props: { className: string }) => JSX.Element
+  string,
+  (props: { className: string; onClick?: () => void }) => JSX.Element
 > = {
-  afraid: (props: { className: string }) => <Icons.afraid {...props} />,
-  angry: (props: { className: string }) => <Icons.angry {...props} />,
-  common: (props: { className: string }) => <Icons.common {...props} />,
-  excited: (props: { className: string }) => <Icons.excited {...props} />,
-  flutter: (props: { className: string }) => <Icons.flutter {...props} />,
-  fun: (props: { className: string }) => <Icons.fun {...props} />,
-  good: (props: { className: string }) => <Icons.good {...props} />,
-  happy: (props: { className: string }) => <Icons.happy {...props} />,
+  두려워: (props: { className: string; onClick?: () => void }) => (
+    <Icons.afraid {...props} />
+  ),
+  화나: (props: { className: string; onClick?: () => void }) => (
+    <Icons.angry {...props} />
+  ),
+  평범해: (props: { className: string; onClick?: () => void }) => (
+    <Icons.common {...props} />
+  ),
+  신나: (props: { className: string; onClick?: () => void }) => (
+    <Icons.excited {...props} />
+  ),
+  설레: (props: { className: string; onClick?: () => void }) => (
+    <Icons.flutter {...props} />
+  ),
+  즐거워: (props: { className: string; onClick?: () => void }) => (
+    <Icons.fun {...props} />
+  ),
+  기뻐: (props: { className: string; onClick?: () => void }) => (
+    <Icons.good {...props} />
+  ),
+  행복해: (props: { className: string; onClick?: () => void }) => (
+    <Icons.happy {...props} />
+  ),
+  슬퍼: (props: { className: string; onClick?: () => void }) => (
+    <Icons.sad {...props} />
+  ),
+  놀라워: (props: { className: string; onClick?: () => void }) => (
+    <Icons.surprising {...props} />
+  ),
+  피곤해: (props: { className: string; onClick?: () => void }) => (
+    <Icons.tired {...props} />
+  ),
+  불쾌해: (props: { className: string; onClick?: () => void }) => (
+    <Icons.unpleasant {...props} />
+  ),
 }
 
 export const COOKIE_KEY = {

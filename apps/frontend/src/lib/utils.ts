@@ -24,3 +24,9 @@ export const formatKRDate = (
 export function absoluteUrl(pathname: string, origin: string): string {
   return new URL(pathname, origin).toString()
 }
+
+export function generateRandomString(length: number): string {
+  return Math.random()
+    .toString(36)
+    .substring(2, 2 + length)
+}

@@ -2,6 +2,9 @@
 
 import * as React from "react"
 import Image from "next/image"
+import { useRouter } from "next/navigation"
+import { EMOTION_ICON, SOUL_FRIENDS_ICON } from "@/constants"
+import { Diary } from "@/types"
 import { ChevronLeftIcon, ChevronRightIcon } from "@radix-ui/react-icons"
 import { isSameDay } from "date-fns"
 import { DayPicker, useDayRender } from "react-day-picker"
@@ -17,8 +20,13 @@ function Calendar({
   className,
   classNames,
   showOutsideDays = true,
+  items,
+  type,
   ...props
-}: CalendarProps) {
+}: CalendarProps & { items: Diary[]; type: "emotion" | "friends" }) {
+  console.log("items:", items)
+
+  const router = useRouter()
   return (
     <DayPicker
       showOutsideDays={showOutsideDays}
@@ -80,6 +88,12 @@ function Calendar({
 
           // const hasDiary = true
 
+          const sameDay = items.find((item) => isSameDay(item.create_dt, date))
+
+          if (type === "friends") {
+            console.log("sameDay:", sameDay)
+          }
+
           return (
             <div className="flex flex-col items-center gap-y-[7px]">
               <button
@@ -89,30 +103,52 @@ function Calendar({
                   "relative invisible",
                   outside ? "invisible" : "visible",
                   {
-                    "border border-dashed": !disabled, //&& !hasDiary
+                    "border border-dashed": !disabled && !sameDay, //&& !hasDiary
                   }
                 )}
                 ref={buttonRef}
                 type="button"
               >
-                {!disabled && isSameDay(date, selectedDays as Date) && (
-                  <Image
-                    className="absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
-                    src={PlusOnIcon.src}
-                    width={12}
-                    height={12}
-                    alt="plus on"
-                  />
-                )}
-                {!disabled && !isSameDay(date, selectedDays as Date) && (
-                  <Image
-                    className="absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
-                    src={PlusOffIcon.src}
-                    width={12}
-                    height={12}
-                    alt="plus off"
-                  />
-                )}
+                {type === "emotion" &&
+                  sameDay &&
+                  EMOTION_ICON[sameDay.emotion]?.({
+                    className:
+                      "absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 size-[40px]",
+                    onClick: () => {
+                      router.push(`/diary/${sameDay.id}`)
+                    },
+                  })}
+                {type === "friends" &&
+                  sameDay &&
+                  SOUL_FRIENDS_ICON[sameDay.character]?.({
+                    className:
+                      "absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2 size-[40px]",
+                    onClick: () => {
+                      router.push(`/diary/${sameDay.id}`)
+                    },
+                  })}
+                {!sameDay &&
+                  !disabled &&
+                  isSameDay(date, selectedDays as Date) && (
+                    <Image
+                      className="absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
+                      src={PlusOnIcon.src}
+                      width={12}
+                      height={12}
+                      alt="plus on"
+                    />
+                  )}
+                {!sameDay &&
+                  !disabled &&
+                  !isSameDay(date, selectedDays as Date) && (
+                    <Image
+                      className="absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2"
+                      src={PlusOffIcon.src}
+                      width={12}
+                      height={12}
+                      alt="plus off"
+                    />
+                  )}
               </button>
 
               <span

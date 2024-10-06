@@ -1,15 +1,16 @@
 import { EMOTION_ICON, SOUL_FRIENDS_ICON } from "@/constants"
-import { EmotionType, FriendType } from "@/types"
 
 import { cn } from "@/lib/utils"
 
 import { Icons } from "./ui/icons"
 
+// import { EmotionType, FriendType } from "@/types"
+
 type EmotionFriendButtonProps = {
   type: "diary" | "card"
   className?: string
-  emotion?: EmotionType
-  friend?: FriendType
+  emotion: string //EmotionType
+  friend: string //FriendType
 }
 
 export const EmotionFriendButton = ({
@@ -35,7 +36,7 @@ export const EmotionFriendButton = ({
         })}
         {type === "diary" && (
           <div className="absolute w-[35px] left-1/2 -translate-x-1/2 font-medium text-xs tracking-[-0.03em] text-[#8d8d8d]">
-            행복해
+            {emotion}
           </div>
         )}
       </div>
@@ -49,7 +50,7 @@ export const EmotionFriendButton = ({
         })}
         {type === "diary" && (
           <div className="absolute w-[35px] left-1/2 -translate-x-1/2 font-medium text-xs tracking-[-0.03em] text-[#8d8d8d]">
-            포근이
+            {friend}
           </div>
         )}
       </div>

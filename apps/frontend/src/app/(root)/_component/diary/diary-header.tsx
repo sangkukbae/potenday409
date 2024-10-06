@@ -1,28 +1,48 @@
 "use client"
 
+import { useMonth } from "@/store/calendar"
 import { addMonths, format } from "date-fns"
 
-import { EmotionFriendButton } from "@/components/emotion-friend-button"
+import { useUpdateSearchParams } from "@/hooks/use-update-search-params"
 import { Icons } from "@/components/ui/icons"
-import { useMonth } from "@/store/calendar"
+import { EmotionFriendButton } from "@/components/emotion-friend-button"
 
-export const DiaryHeader = () => {
+export const DiaryHeader = ({
+  emotion,
+  friend,
+}: {
+  emotion: string
+  friend: string
+}) => {
   const { month, setMonth } = useMonth((state) => state)
 
-  const noData = false
+  const { updateSearchParams } = useUpdateSearchParams()
+
   return (
     <header className="flex flex-col items-center mb-[18px]">
       <div className="flex items-center gap-x-[6px] h-[21px] mb-[25px]">
         <Icons.chevronLeft
           className="cursor-pointer"
-          onClick={() => setMonth(addMonths(month, -1))}
+          onClick={() => {
+            setMonth(addMonths(month, -1))
+            updateSearchParams({
+              year: new Date().getFullYear(),
+              month: format(addMonths(month, -1), "MM"),
+            })
+          }}
         />
         <span className="font-bold text-lg tracking-[-0.03em]">
           {format(month, "yyyy.MM")}
         </span>
         <Icons.chevronRight
           className="cursor-pointer"
-          onClick={() => setMonth(addMonths(month, 1))}
+          onClick={() => {
+            setMonth(addMonths(month, 1))
+            updateSearchParams({
+              year: new Date().getFullYear(),
+              month: format(addMonths(month, -1), "MM"),
+            })
+          }}
         />
         {/* <Icons.calendar className="cursor-pointer" /> */}
       </div>
@@ -30,10 +50,15 @@ export const DiaryHeader = () => {
         이번 달 소울프렌즈
       </div>
 
-      {noData ? (
+      {!emotion && !friend ? (
         <EmptyDiary />
       ) : (
-        <EmotionFriendButton className="mb-[18px]" type="diary" />
+        <EmotionFriendButton
+          className="mb-[18px]"
+          type="diary"
+          emotion={emotion}
+          friend={friend}
+        />
       )}
     </header>
   )

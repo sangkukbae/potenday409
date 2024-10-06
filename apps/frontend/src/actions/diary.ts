@@ -4,13 +4,29 @@ import { Diary } from "@/types"
 import { fetchData } from "."
 import qs from "query-string"
 
-// export const getDiaryList = async ({
-//   year,
-//   month,
-// }: {
-//   year: number
-//   month: number
-// }) => await fetchData(`/diary/multiple?${qs.stringify({ year, month })}`)
+interface CalendarDiary {
+  diaries: Diary[]
+  mostCharacter: string
+  mostEmotion: string
+}
+
+export const getCalendarDiary = async ({
+  year,
+  month,
+}: {
+  year: string
+  month: string
+}): Promise<CalendarDiary | null> => {
+  try {
+    const data = await fetchData<CalendarDiary>(
+      `/diary/multiple?${qs.stringify({ year, month })}`
+    )
+    return data
+  } catch (error) {
+    console.error(`Error getting calendar diary: ${error}`)
+    return null
+  }
+}
 
 export const addDiary = async ({
   title,

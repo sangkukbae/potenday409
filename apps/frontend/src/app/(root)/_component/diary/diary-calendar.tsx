@@ -1,20 +1,23 @@
 "use client"
 
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { useState } from "react"
+import { useRouter } from "next/navigation"
+import { useMonth } from "@/store/calendar"
+import { useDiary } from "@/store/diary"
+import { Diary } from "@/types"
+import { isSameDay } from "date-fns"
+import { ko } from "date-fns/locale"
 
 import { Calendar } from "@/components/ui/calendar"
-import { ko } from "date-fns/locale"
-import { useDiary } from "@/store/diary"
-import { useMonth } from "@/store/calendar"
-import { useRouter } from "next/navigation"
-import { useState } from "react"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
-export const DiaryCalendar = () => {
+export const DiaryCalendar = ({ items }: { items: Diary[] }) => {
   const [date, setDate] = useState<Date | undefined>(new Date())
   const { setDate: setDateStore } = useDiary((state) => state)
 
   const router = useRouter()
   const { month } = useMonth((state) => state)
+  const { clear } = useDiary((state) => state)
 
   return (
     <Tabs className="" defaultValue="emotion">
@@ -51,7 +54,15 @@ export const DiaryCalendar = () => {
           selected={date}
           onSelect={(val) => {
             if (val === undefined) {
-              router.push("/diary/write")
+              if (date) {
+                const sameDay = items.find((item) =>
+                  isSameDay(item.create_dt, date)
+                )
+                if (!sameDay) {
+                  clear()
+                  router.push("/diary/write")
+                }
+              }
             } else {
               setDate(val)
               setDateStore(val)
@@ -62,6 +73,8 @@ export const DiaryCalendar = () => {
           }
           locale={ko}
           month={month}
+          items={items}
+          type="emotion"
         />
       </TabsContent>
       <TabsContent value="friends">
@@ -83,9 +96,18 @@ export const DiaryCalendar = () => {
           selected={date}
           onSelect={(val) => {
             if (val === undefined) {
-              router.push("/diary/write")
+              if (date) {
+                const sameDay = items.find((item) =>
+                  isSameDay(item.create_dt, date)
+                )
+                if (!sameDay) {
+                  clear()
+                  router.push("/diary/write")
+                }
+              }
             } else {
               setDate(val)
+              setDateStore(val)
             }
           }}
           disabled={(date) =>
@@ -93,6 +115,8 @@ export const DiaryCalendar = () => {
           }
           locale={ko}
           month={month}
+          items={items}
+          type="friends"
         />
       </TabsContent>
     </Tabs>
