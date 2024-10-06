@@ -19,7 +19,7 @@ import { DiaryService } from "./diary.service"
 export class DiaryController {
   constructor(private readonly diaryService: DiaryService) {}
 
-  @Get()
+  @Get("date")
   @UseGuards(JwtGuard)
   async getDiary(
     @Request() req,
