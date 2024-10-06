@@ -16,18 +16,19 @@ export class DiaryService {
     private readonly clovaService: ClovaService
   ) {}
 
-  async createDiary(
-    userId,
-    diaryData: CreateDiaryDto,
-    year: number,
-    month: number,
-    day: number
-  ) {
+  async createDiary(userId, diaryData: CreateDiaryDto) {
     const user = await this.userService.getUserById(userId)
     const diary = this.diaryRepository.create({ ...diaryData, user })
-    const save_dt = new Date(year, month - 1, day)
+    const save_dt = new Date(diaryData.year, diaryData.month - 1, diaryData.day)
 
-    if (!(await this.validateDiary(userId, year, month, day))) {
+    if (
+      !(await this.validateDiary(
+        userId,
+        diaryData.year,
+        diaryData.month,
+        diaryData.day
+      ))
+    ) {
       throw new BadRequestException(
         "A diary entry for this date already exists."
       )
