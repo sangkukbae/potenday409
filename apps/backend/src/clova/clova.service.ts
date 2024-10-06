@@ -66,7 +66,8 @@ export class ClovaService {
         if (
           resultData.songArtist &&
           resultData.songTitle &&
-          resultData.emotion
+          resultData.emotion &&
+          this.emotionList.includes(resultData.emotion)
         ) {
           break
         } else {
@@ -149,6 +150,20 @@ export class ClovaService {
     }
   }
 
+  private readonly emotionList = [
+    "기뻐",
+    "행복해",
+    "설레",
+    "즐거워",
+    "신나",
+    "평범해",
+    "놀라워",
+    "불쾌해",
+    "피곤해",
+    "두려워",
+    "슬퍼",
+    "화나",
+  ]
   private readonly messageTemplate: string = `
     선택한 캐릭터: "캐릭터"
     일기 제목: "일기 제목"
