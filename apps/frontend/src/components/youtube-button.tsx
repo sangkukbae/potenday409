@@ -5,8 +5,8 @@ import { cn } from "@/lib/utils"
 
 type YoutubeButtonProps = {
   className?: string
-  link: string
-  value: string
+  link?: string
+  value?: string
 }
 
 export const YoutubeButton = ({
@@ -15,7 +15,7 @@ export const YoutubeButton = ({
   value,
 }: YoutubeButtonProps) => {
   return (
-    <Link href={link} target="_blank">
+    <Link href={link || ""} target="_blank">
       <div
         className={cn(
           "w-full p-[10px] rounded-[8px] bg-white border border-[#dddddd] flex items-center gap-x-3",
@@ -24,7 +24,7 @@ export const YoutubeButton = ({
       >
         <Image src={YoutubeIcon.src} width={24} height={16} alt="youtube" />
         <span className="leading-[150%] tracking-[-0.02em] text-[#333333]">
-          {value}
+          {value || ""}
         </span>
       </div>
     </Link>
