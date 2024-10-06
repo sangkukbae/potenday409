@@ -17,6 +17,10 @@ export class DiaryService {
   ) {}
 
   async createDiary(userId, diaryData: CreateDiaryDto) {
+    if (!(await this.validateDiary(userId))) {
+      throw new BadRequestException("User Diary already exists")
+    }
+
     const user = await this.userService.getUserById(userId)
     const diary = this.diaryRepository.create({ ...diaryData, user })
     const { reply_content, music_url, emotion, music_name } =
@@ -34,6 +38,29 @@ export class DiaryService {
     })
   }
 
+  async validateDiary(userId) {
+    const today = new Date()
+    const startOfDay = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate()
+    )
+    const endOfDay = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      today.getDate() + 1
+    )
+
+    const diary = await this.diaryRepository.findOne({
+      where: {
+        id: userId,
+        create_dt: Between(startOfDay, endOfDay),
+      },
+    })
+
+    return !diary
+  }
+
   async getDiary(id: number) {
     const diary = await this.diaryRepository.findOne({
       where: { id },
@@ -43,6 +70,18 @@ export class DiaryService {
     }
 
     return diary
+  }
+
+  async getDiaryByDate(userId, year: number, month: number, day: number) {
+    const startOfDay = new Date(year, month - 1, day)
+    const endOfDay = new Date(year, month - 1, day + 1)
+
+    return await this.diaryRepository.findOne({
+      where: {
+        user: { id: userId },
+        create_dt: Between(startOfDay, endOfDay),
+      },
+    })
   }
 
   async updateDiary(id: number, updateData: UpdateDiaryDto) {
@@ -73,7 +112,7 @@ export class DiaryService {
     return this.diaryRepository.delete(id)
   }
 
-  async find(userId: number, sort: string[], limit: number) {
+  async find(userId: number, sort: string[], limit: number, page: number) {
     let order = {}
 
     if (sort.includes("heart")) {
@@ -86,12 +125,27 @@ export class DiaryService {
       order = { ...order, create_dt: "ASC" } // 오래된순
     }
 
+    const totalCount = await this.diaryRepository.count({
+      where: { user: { id: userId } },
+    })
+
+    const totalPages = Math.ceil(totalCount / limit)
+
+    const skip = (page - 1) * limit
+
     const result = await this.diaryRepository.find({
       where: { user: { id: userId } },
       order,
-      take: limit, // 가져올 데이터 수 제한
+      take: limit,
+      skip,
     })
-    return result
+
+    return {
+      diaries: result,
+      page,
+      totalPages,
+      totalCount,
+    }
   }
 
   async findMultiple({
