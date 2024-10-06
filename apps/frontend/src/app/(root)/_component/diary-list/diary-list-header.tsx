@@ -1,14 +1,16 @@
-import { useState } from "react"
+"use client"
 
-import { cn } from "@/lib/utils"
+// import { useState } from "react"
+
+// import { cn } from "@/lib/utils"
 
 export const DiaryListHeader = () => {
-  const [sort, setSort] = useState("최신순")
+  // const [sort, setSort] = useState("최신순")
   return (
     <header className="flex justify-between mt-[47px] px-[18px] mb-5">
       <h2 className="font-bold tracking-[-0.03em] text-black">내일기</h2>
 
-      <ul className="flex items-center gap-x-4">
+      {/* <ul className="flex items-center gap-x-4">
         {["최신순", "오래된순", "좋아요순"].map((item) => (
           <li
             className={cn(
@@ -25,7 +27,7 @@ export const DiaryListHeader = () => {
             {item}
           </li>
         ))}
-      </ul>
+      </ul> */}
     </header>
   )
 }

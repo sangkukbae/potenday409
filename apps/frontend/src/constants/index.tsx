@@ -49,7 +49,7 @@ export const SOUL_FRIENDS = [
   },
 ]
 
-export const SOUL_FRIENDS_CARD_COLOR = {
+export const SOUL_FRIENDS_CARD_COLOR: Record<string, string> = {
   단짝이: "#FFFBEA",
   포근이: "#EBF8FD",
   열정이: "#FFF1F1",

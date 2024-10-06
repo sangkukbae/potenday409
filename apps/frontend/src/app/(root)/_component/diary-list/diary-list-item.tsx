@@ -1,23 +1,18 @@
 "use client"
 
-import Link from "next/link"
 import { useRouter } from "next/navigation"
 import { SOUL_FRIENDS_CARD_COLOR } from "@/constants"
+import { Diary } from "@/types"
+import { format } from "date-fns"
+import { ko } from "date-fns/locale"
 
-import { ButtonGroup } from "@/components/button-group"
+import { convertKRDate } from "@/lib/utils"
+// import { ButtonGroup } from "@/components/button-group"
 import { EmotionFriendButton } from "@/components/emotion-friend-button"
 import { YoutubeButton } from "@/components/youtube-button"
 
-type FriendType = keyof typeof SOUL_FRIENDS_CARD_COLOR
-
-export const DiaryListItem = ({
-  emotion,
-  friend,
-}: {
-  emotion: string
-  friend: FriendType
-}) => {
-  const color = SOUL_FRIENDS_CARD_COLOR[friend]
+export const DiaryListItem = ({ item }: { item: Diary }) => {
+  const color = SOUL_FRIENDS_CARD_COLOR[item.character]
 
   const router = useRouter()
 
@@ -27,31 +22,32 @@ export const DiaryListItem = ({
       style={{ backgroundColor: `${color}` }}
     >
       <div className="font-medium text-[12px] tracking-[-0.03em] text-[#8D8D8D] mb-4">
-        2024. 10. 3 수요일
+        {format(convertKRDate(item.create_dt), "yyyy. MM. dd EEEE", {
+          locale: ko,
+        })}
       </div>
       <h2
         className="font-semibold tracking-[-0.03em] text-[#333333] mb-4 cursor-pointer"
         onClick={() => router.push("/diary/1")}
       >
-        일기 제목 영역
+        {item.title}
       </h2>
-      <Link
-        className="inline-block"
-        href="https://www.youtube.com/watch?v=ft70sAYrFyY&ab_channel=HYBELABELS"
-        target="_blank"
-      >
-        <YoutubeButton className="text-xs w-fit" />
-      </Link>
-      <ButtonGroup
+      <YoutubeButton
+        className="text-xs w-fit"
+        link={item.music_url}
+        value={item.music_name}
+      />
+      {/* <ButtonGroup
         className="absolute right-[36px] bottom-5 size-5 gap-x-2"
         size="sm"
-        id={1} // TODO: diaryId
-      />
+        id={item.id}
+        heart={item.heart}
+      /> */}
       <EmotionFriendButton
         className="absolute top-4 right-4"
         type="card"
-        emotion={emotion}
-        friend={friend}
+        emotion={item.emotion}
+        friend={item.character}
       />
     </div>
   )

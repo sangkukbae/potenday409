@@ -1,27 +1,34 @@
 "use client"
 
+import { useState } from "react"
+import { usePathname, useRouter } from "next/navigation"
+import { removeDiary, updateLike } from "@/actions/diary"
+import { useAlert } from "@/store/alert"
+import { useDiary } from "@/store/diary"
+
+import { cn } from "@/lib/utils"
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
-import { removeDiary, updateLike } from "@/actions/diary"
-import { usePathname, useRouter } from "next/navigation"
 
 import { Icons } from "./ui/icons"
-import { cn } from "@/lib/utils"
-import { useAlert } from "@/store/alert"
-import { useDiary } from "@/store/diary"
-import { useState } from "react"
 
 type ButtonGroupProps = {
   className?: string
   size?: "sm" | "md" | "lg"
   id: number
+  heart?: number
 }
 
-export const ButtonGroup = ({ className, size, id }: ButtonGroupProps) => {
-  const [liked, setLiked] = useState(false)
+export const ButtonGroup = ({
+  className,
+  size,
+  id,
+  heart,
+}: ButtonGroupProps) => {
+  const [liked, setLiked] = useState(heart === 1 ? true : false)
 
   const path = usePathname()
   const router = useRouter()

@@ -11,6 +11,13 @@ interface CalendarDiary {
   mostEmotion: string
 }
 
+interface DiaryList {
+  diaries: Diary[]
+  page: number
+  totalPage: number
+  totalCount: number
+}
+
 export const getCalendarDiary = async ({
   year,
   month,
@@ -25,6 +32,36 @@ export const getCalendarDiary = async ({
     return data
   } catch (error) {
     console.error(`Error getting calendar diary: ${error}`)
+    return null
+  }
+}
+
+export const getDiaryList = async ({
+  sort = "recent",
+  limit = 10,
+  page = 1,
+}: {
+  sort: "recent" | "heart"
+  limit: number
+  page: number
+}): Promise<DiaryList | null> => {
+  try {
+    const data = await fetchData<DiaryList>(
+      `/diary?${qs.stringify({ sort, limit, page })}`
+    )
+    return data
+  } catch (error) {
+    console.error(`Error getting diary list: ${error}`)
+    return null
+  }
+}
+
+export const getDiary = async (diaryId: number): Promise<Diary | null> => {
+  try {
+    const data = await fetchData<Diary>(`/diary/${diaryId}`)
+    return data
+  } catch (error) {
+    console.error(`Error getting diary: ${error}`)
     return null
   }
 }
@@ -51,24 +88,6 @@ export const addDiary = async ({
     return data
   } catch (error) {
     console.error(`Error adding diary: ${error}`)
-  }
-}
-
-export const getDiaryList = async ({
-  sort = "recent",
-  limit = 10,
-}: {
-  sort: "recent" | "heart"
-  limit: number
-}): Promise<Diary[] | null> => {
-  try {
-    const data = await fetchData<Diary[]>(
-      `/diary?${qs.stringify({ sort, limit })}`
-    )
-    return data
-  } catch (error) {
-    console.error(`Error getting diary list: ${error}`)
-    return null
   }
 }
 

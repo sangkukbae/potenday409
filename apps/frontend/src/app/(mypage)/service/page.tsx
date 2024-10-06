@@ -1,3 +1,9 @@
+import { TermsAndService } from "@/components/terms-condition"
+
 export default function ServicePage() {
-  return <div className="">서비스 이용약관</div>
+  return (
+    <div className="p-6">
+      <TermsAndService />
+    </div>
+  )
 }

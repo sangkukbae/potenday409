@@ -1,24 +1,26 @@
+import { notFound } from "next/navigation"
+import { getDiary } from "@/actions/diary"
+
 import { AppHeader } from "@/components/app-header"
+
 import { FriendsReply } from "../../_component/diary-detail/friends-reply"
 import { MyDiary } from "../../_component/diary-detail/my-diary"
 import { MyEmotion } from "../../_component/diary-detail/my-emotion"
-import { getDiaryList } from "@/actions/diary"
-import { notFound } from "next/navigation"
 
 export default async function DiaryDetailPage({
   params,
 }: {
   params: { id: string }
 }) {
-  const data = await getDiaryList({ sort: "recent", limit: 10 })
-
-  if (!data) {
+  if (!params.id) {
     return notFound()
   }
 
-  const diary = data.find((diary) => {
-    return diary.id === Number(params.id)
-  })
+  const diary = await getDiary(Number(params.id))
+
+  if (!diary) {
+    return notFound()
+  }
 
   return (
     <div className="flex flex-col items-center px-5 mb-[60px]">

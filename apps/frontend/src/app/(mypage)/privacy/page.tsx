@@ -1,3 +1,9 @@
+import { PrivacyPolicy } from "@/components/privacy-policy"
+
 export default function PrivacyPage() {
-  return <div className="">개인정보 처리방침</div>
+  return (
+    <div className="p-6">
+      <PrivacyPolicy />
+    </div>
+  )
 }

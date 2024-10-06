@@ -1,10 +1,14 @@
 "use client"
 
+import { useRouter } from "next/navigation"
+import { useAlert } from "@/store/alert"
+import { format } from "date-fns"
+import { ko } from "date-fns/locale"
+
+import { convertKRDate } from "@/lib/utils"
+
 import { ButtonGroup } from "./button-group"
 import { Icons } from "./ui/icons"
-import { formatKRDate } from "@/lib/utils"
-import { useAlert } from "@/store/alert"
-import { useRouter } from "next/navigation"
 
 export const AppHeader = ({
   date,
@@ -34,7 +38,7 @@ export const AppHeader = ({
         }}
       />
       <div className="text-center font-bold tracking-[-0.03em]">
-        {formatKRDate(date)}
+        {format(convertKRDate(date), "M월 d일 EEEE", { locale: ko })}
       </div>
 
       <ButtonGroup className="absolute right-[12px]" size="md" id={diaryId} />
