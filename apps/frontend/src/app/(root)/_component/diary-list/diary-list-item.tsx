@@ -28,7 +28,7 @@ export const DiaryListItem = ({ item }: { item: Diary }) => {
       </div>
       <h2
         className="font-semibold tracking-[-0.03em] text-[#333333] mb-4 cursor-pointer"
-        onClick={() => router.push("/diary/1")}
+        onClick={() => router.push(`/diary/${item.id}`)}
       >
         {item.title}
       </h2>
