@@ -1,5 +1,5 @@
 import { ClovaService } from "@/clova/clova.service"
-import { CreateDiaryDto, UpdateDiaryDto } from "@/diary/dirary.dto"
+import { CreateDiaryDto, UpdateDiaryContentDto } from "@/diary/dirary.dto"
 import { UserService } from "@/user/user.service"
 import { BadRequestException, Injectable } from "@nestjs/common"
 import { InjectRepository } from "@nestjs/typeorm"
@@ -88,7 +88,7 @@ export class DiaryService {
     })
   }
 
-  async updateDiary(id: number, updateData: UpdateDiaryDto) {
+  async updateDiaryContent(id: number, updateData: UpdateDiaryContentDto) {
     const diary = await this.getDiary(id)
     const { reply_content, music_url, emotion, music_name } =
       await this.clovaService.generateResponse(
@@ -109,7 +109,11 @@ export class DiaryService {
   }
 
   async updateDiaryHeart(id: number, heart: number) {
-    await this.diaryRepository.update(id, { heart })
+    await this.diaryRepository.update(id, {
+      heart,
+      update_dt: () => "CURRENT_TIMESTAMP",
+    })
+    return this.getDiary(id)
   }
 
   deleteDiary(id: number) {
