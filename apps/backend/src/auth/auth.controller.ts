@@ -1,6 +1,16 @@
-import { Controller, Get, Request, Response, UseGuards } from "@nestjs/common"
+import {
+  Controller,
+  Get,
+  Headers,
+  HttpCode,
+  HttpStatus,
+  Post,
+  Request,
+  Response,
+  UseGuards,
+} from "@nestjs/common"
 
-import { GoogleAuthGuard, KakaoAuthGuard } from "./auth.guard"
+import { GoogleAuthGuard, JwtGuard, KakaoAuthGuard } from "./auth.guard"
 import { AuthService } from "./auth.service"
 
 export interface JwtPayload {
@@ -9,48 +19,89 @@ export interface JwtPayload {
   email: string
 }
 
-@Controller("auth")
+@Controller("v1/auth")
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
-  @Get("to-google") // 구글 로그인으로 이동하는 라우터 메서드
-  @UseGuards(GoogleAuthGuard)
-  async googleAuth() {}
 
-  @Get("google")
+  // Google OAuth
+  @Get("google/login")
   @UseGuards(GoogleAuthGuard)
-  async googleAuthRedirect(@Request() req, @Response() res) {
+  async initiateGoogleAuth() {
+    // Guard will redirect to Google
+  }
+
+  @Get("google/callback")
+  @UseGuards(GoogleAuthGuard)
+  @HttpCode(HttpStatus.OK)
+  async handleGoogleCallback(@Request() req, @Response() res) {
     const { user } = req
     const { accessToken, refreshToken } =
       await this.authService.googleLogin(user)
 
-    res.cookie("access_token", accessToken, { secure: true })
-    res.cookie("refresh_token", refreshToken, { secure: true })
+    // Set secure cookies
+    res.cookie("access_token", accessToken, {
+      //httpOnly: true,
+      secure: true,
+      sameSite: "strict",
+    })
+    res.cookie("refresh_token", refreshToken, {
+      //httpOnly: true,
+      secure: true,
+      sameSite: "strict",
+    })
 
-    if (!user.user_name) {
-      return res.redirect("/nickname")
-    } else {
-      return res.redirect("/diary")
-    }
+    // Redirect based on user state
+    const redirectUrl = user.user_name ? "/diary" : "/nickname"
+    return res.redirect(redirectUrl)
   }
 
+  // Kakao OAuth
+  @Get("kakao/login")
   @UseGuards(KakaoAuthGuard)
-  @Get("to-kakao")
-  async kakaoAuth() {}
+  async initiateKakaoAuth() {
+    // Guard will redirect to Kakao
+  }
 
-  @Get("kakao")
+  @Get("kakao/callback")
   @UseGuards(KakaoAuthGuard)
-  async kakaoAuthRedirect(@Request() req, @Response() res) {
+  @HttpCode(HttpStatus.OK)
+  async handleKakaoCallback(@Request() req, @Response() res) {
     const { user } = req
     const { accessToken, refreshToken } =
       await this.authService.kakaoLogin(user)
 
-    res.cookie("access_token", accessToken, { secure: true }) // httpOnly 및 secure 설정
-    res.cookie("refresh_token", refreshToken, { secure: true }) // httpOnly 및 secure 설정
+    // Set secure cookies
+    res.cookie("access_token", accessToken, {
+      //httpOnly: true,
+      secure: true,
+      sameSite: "strict",
+    })
+    res.cookie("refresh_token", refreshToken, {
+      //httpOnly: true,
+      secure: true,
+      sameSite: "strict",
+    })
 
-    if (!user.user_name) {
-      return res.redirect("/nickname")
-    } else {
-      return res.redirect("/diary")
-    }
+    // Redirect based on user state
+    const redirectUrl = user.user_name ? "/diary" : "/nickname"
+    return res.redirect(redirectUrl)
   }
+
+  // Token refresh
+  @Post("token/refresh")
+  @UseGuards(JwtGuard)
+  @HttpCode(HttpStatus.OK)
+  async refreshToken(@Headers("authorization") authorization: string) {
+    const refreshToken = authorization.replace("Bearer ", "")
+    return this.authService.refreshAccessToken(refreshToken)
+  }
+
+  // @Post("logout")
+  // @UseGuards(JwtGuard)
+  // @HttpCode(HttpStatus.NO_CONTENT)
+  // async logout(@Response() res) {
+  //   res.clearCookie("access_token")
+  //   res.clearCookie("refresh_token")
+  //   return res.send()
+  // }
 }
