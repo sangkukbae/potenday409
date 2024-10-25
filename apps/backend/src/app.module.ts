@@ -23,10 +23,10 @@ import { UserModule } from "./user/user.module"
 @Module({
   imports: [
     ConfigModule.forRoot({
-      envFilePath: [
-        path.resolve(__dirname, "./configs/.env"),
-        path.resolve(__dirname, "./.env"),
-      ],
+      envFilePath: path.resolve(
+        __dirname,
+        process.env.NODE_ENV === "dev" ? "./configs/.dev.env" : "./configs/.env"
+      ),
       isGlobal: true,
     }),
     TypeOrmModule.forRoot({
