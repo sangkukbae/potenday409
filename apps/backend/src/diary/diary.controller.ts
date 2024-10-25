@@ -32,7 +32,7 @@ import {
 } from "./dirary.dto"
 
 @ApiTags("Diaries")
-@Controller("v1/diaries")
+@Controller({ path: "diaries", version: "1" })
 @UseGuards(JwtGuard)
 @ApiBearerAuth("JWT-auth")
 export class DiaryController {

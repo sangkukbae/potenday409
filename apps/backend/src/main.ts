@@ -1,5 +1,5 @@
 import * as process from "process"
-import { ValidationPipe } from "@nestjs/common"
+import { ValidationPipe, VersioningType } from "@nestjs/common"
 import { NestFactory } from "@nestjs/core"
 import { NestExpressApplication } from "@nestjs/platform-express"
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger"
@@ -21,6 +21,10 @@ async function bootstrap() {
       cookie: { maxAge: 3600000 }, //1시간
     })
   )
+  app.enableVersioning({
+    type: VersioningType.URI, // URI 기반 버전 관리
+    prefix: "v", // 'v' prefix 사용
+  })
   //passport 초기화 및 세션 저장소 초기화
   app.use(passport.initialize())
   app.use(passport.session())
@@ -48,6 +52,17 @@ async function bootstrap() {
         in: "header", // 토큰이 전달될 위치 (header, query, cookie)
       },
       "JWT-auth" // 보안 스키마의 키 (컨트롤러의 @ApiBearerAuth()와 매칭)
+    )
+    .addBearerAuth(
+      {
+        type: "http",
+        scheme: "bearer",
+        bearerFormat: "JWT",
+        name: "Refresh",
+        description: "Enter Refresh token",
+        in: "header",
+      },
+      "refresh-token" // refresh 토큰용 키
     )
     .build()
 
