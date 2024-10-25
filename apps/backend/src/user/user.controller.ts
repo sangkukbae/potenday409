@@ -5,6 +5,7 @@ import {
   Body,
   Controller,
   Get,
+  HttpStatus,
   Put,
   Query,
   Request,
@@ -21,7 +22,7 @@ import {
 
 import { UserService } from "./user.service"
 
-@ApiTags("Users") // 스웨거 문서에서 그룹화
+@ApiTags("Users")
 @Controller("v1/users")
 export class UserController {
   constructor(private readonly userService: UserService) {}
@@ -33,7 +34,7 @@ export class UserController {
     description: "확인하고자 하는 사용자명",
   })
   @ApiResponse({
-    status: 200,
+    status: HttpStatus.OK,
     description: "사용자명 사용 가능 여부 반환",
     schema: {
       type: "object",
@@ -47,20 +48,20 @@ export class UserController {
   })
   @Get()
   async checkUsername(@Query("username") username: string) {
-    const isAvailable = this.userService.checkNickname(username)
+    const isAvailable = await this.userService.checkNickname(username)
     return { available: isAvailable }
   }
 
   @ApiOperation({ summary: "현재 사용자 정보 업데이트" })
-  @ApiBearerAuth("JWT-auth") // JWT 인증 필요 표시
+  @ApiBearerAuth("JWT-auth")
   @ApiBody({ type: UpdateUserDto })
   @ApiResponse({
-    status: 200,
+    status: HttpStatus.OK,
     description: "사용자 정보 업데이트 성공",
     type: UpdateUserDto,
   })
   @ApiResponse({
-    status: 401,
+    status: HttpStatus.UNAUTHORIZED,
     description: "인증되지 않은 사용자",
   })
   @Put("me")
@@ -72,12 +73,12 @@ export class UserController {
   @ApiOperation({ summary: "현재 사용자 정보 조회" })
   @ApiBearerAuth("JWT-auth")
   @ApiResponse({
-    status: 200,
+    status: HttpStatus.OK,
     description: "현재 사용자 정보",
     type: UserDto,
   })
   @ApiResponse({
-    status: 401,
+    status: HttpStatus.UNAUTHORIZED,
     description: "인증되지 않은 사용자",
   })
   @Get("me")

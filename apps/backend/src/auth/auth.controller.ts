@@ -83,7 +83,7 @@ export class AuthController {
     })
 
     // Redirect based on user state
-    const redirectUrl = user.user_name ? "/diary" : "/nickname"
+    const redirectUrl = user.user_name ? "/v1/diary" : "/v2/nickname"
     return res.redirect(redirectUrl)
   }
 

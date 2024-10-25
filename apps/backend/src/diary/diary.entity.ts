@@ -34,6 +34,11 @@ export class Diary {
     type: "datetime",
     nullable: false,
     default: () => "CURRENT_TIMESTAMP",
+    transformer: {
+      from: (value: Date) =>
+        value ? value.toISOString().split(".")[0] : value,
+      to: (value: string) => value,
+    },
   })
   create_dt: Date
 
@@ -46,7 +51,11 @@ export class Diary {
   @Column({
     type: "datetime",
     nullable: false,
-    default: () => "CURRENT_TIMESTAMP",
+    transformer: {
+      from: (value: Date) =>
+        value ? value.toISOString().split(".")[0] : value,
+      to: (value: string) => value,
+    },
   })
   save_dt: Date
 }

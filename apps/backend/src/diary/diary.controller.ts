@@ -71,44 +71,45 @@ export class DiaryController {
     @Query("page") page?: number
   ) {
     const sortArray = sort ? sort.split(",") : ["recent"]
-    return await this.diaryService.find(req.user.id, sortArray, limit, page)
+    return await this.diaryService.getDiaryList(
+      req.user.id,
+      sortArray,
+      limit,
+      page
+    )
   }
 
   @Get("by-date")
-  @ApiOperation({ summary: "날짜별 일기 조회" })
+  @ApiOperation({ summary: "일별/월별 일기 조회" })
   @ApiQuery({ name: "year", required: true, type: Number })
   @ApiQuery({ name: "month", required: true, type: Number })
-  @ApiQuery({ name: "day", required: true, type: Number })
+  @ApiQuery({
+    name: "day",
+    required: false,
+    type: Number,
+    description: "day 파라미터가 없으면 해당 월의 전체 일기를 조회합니다",
+  })
   @ApiResponse({
     status: HttpStatus.OK,
     description: "일기 조회 성공",
     type: DiaryDto,
+    isArray: true,
   })
-  async getDiaryByDate(
+  async getDiariesByDate(
     @Request() req,
     @Query("year", ParseIntPipe) year: number,
     @Query("month", ParseIntPipe) month: number,
-    @Query("day", ParseIntPipe) day: number
+    @Query("day", new ParseIntPipe({ optional: true })) day?: number
   ) {
-    return await this.diaryService.getDiaryByDate(req.user.id, year, month, day)
-  }
-
-  @Get("monthly")
-  @ApiOperation({ summary: "월별 일기 목록 조회" })
-  @ApiQuery({ name: "year", required: true, type: Number })
-  @ApiQuery({ name: "month", required: true, type: Number })
-  @ApiResponse({
-    status: HttpStatus.OK,
-    description: "월별 일기 목록 조회 성공",
-    type: DiaryDto,
-    isArray: true,
-  })
-  async getMonthlyDiaries(
-    @Request() req,
-    @Query("year", ParseIntPipe) year: number,
-    @Query("month", ParseIntPipe) month: number
-  ) {
-    return await this.diaryService.findMultiple({
+    if (day) {
+      return await this.diaryService.getDiaryByDate(
+        req.user.id,
+        year,
+        month,
+        day
+      )
+    }
+    return await this.diaryService.getDiaryByMonthly({
       userId: req.user.id,
       year,
       month,

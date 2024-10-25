@@ -19,16 +19,9 @@ export class DiaryService {
   async createDiary(userId, diaryData: CreateDiaryDto) {
     const user = await this.userService.getUserById(userId)
     const diary = this.diaryRepository.create({ ...diaryData, user })
-    const save_dt = new Date(diaryData.year, diaryData.month - 1, diaryData.day)
+    const save_dt = diaryData.date
 
-    if (
-      !(await this.validateDiary(
-        userId,
-        diaryData.year,
-        diaryData.month,
-        diaryData.day
-      ))
-    ) {
+    if (!(await this.validateDiary(userId, diaryData.date))) {
       throw new BadRequestException(
         "A diary entry for this date already exists."
       )
@@ -51,14 +44,16 @@ export class DiaryService {
     })
   }
 
-  async validateDiary(userId, year: number, month: number, day: number) {
-    const startOfDay = new Date(year, month - 1, day)
-    const endOfDay = new Date(year, month - 1, day + 1)
+  async validateDiary(userId: number, date: string) {
+    const startDate = new Date(date)
+    startDate.setHours(0, 0, 0, 0)
+    const endDate = new Date(date)
+    endDate.setHours(23, 59, 59, 999)
 
     const diary = await this.diaryRepository.findOne({
       where: {
-        user: { id: userId }, // userId로 수정
-        create_dt: Between(startOfDay, endOfDay),
+        user: { id: userId },
+        create_dt: Between(startDate, endDate),
       },
     })
 
@@ -120,7 +115,12 @@ export class DiaryService {
     return this.diaryRepository.delete(id)
   }
 
-  async find(userId: number, sort: string[], limit: number, page: number) {
+  async getDiaryList(
+    userId: number,
+    sort: string[],
+    limit: number,
+    page: number
+  ) {
     let order = {}
 
     if (sort.includes("heart")) {
@@ -156,7 +156,7 @@ export class DiaryService {
     }
   }
 
-  async findMultiple({
+  async getDiaryByMonthly({
     userId,
     year,
     month,

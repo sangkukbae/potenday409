@@ -1,7 +1,7 @@
 import { Diary } from "@/diary/diary.entity"
 import { UserDto } from "@/user/user.dto"
 import { ApiProperty } from "@nestjs/swagger"
-import { IsNotEmpty, IsNumber, Max, Min } from "class-validator"
+import { IsDateString, IsEnum, IsNotEmpty, IsNumber } from "class-validator"
 
 export class DiaryDto {
   @ApiProperty({ description: "일기 ID" })
@@ -60,23 +60,35 @@ export class DiaryDto {
 }
 
 export class CreateDiaryDto {
+  @ApiProperty({
+    description: "일기 제목",
+    example: "오늘의 일기",
+  })
   @IsNotEmpty()
   title: string
 
+  @ApiProperty({
+    description: "일기 내용",
+    example: "오늘은 날씨가 좋았다...",
+  })
   @IsNotEmpty()
   content: string
 
+  @ApiProperty({
+    description: "캐릭터 종류",
+    example: "단짝이",
+  })
   @IsNotEmpty()
   character: string
 
+  @ApiProperty({
+    description: "일기 작성 날짜",
+    example: "2024-10-25",
+    type: String,
+  })
   @IsNotEmpty()
-  year: number
-
-  @IsNotEmpty()
-  month: number
-
-  @IsNotEmpty()
-  day: number
+  @IsDateString()
+  date: string
 }
 
 export class UpdateDiaryContentDto {
@@ -92,45 +104,10 @@ export class UpdateDiaryHeartDto {
   @ApiProperty({
     description: "하트 상태 (0: 없음, 1: 있음)",
     example: 1,
-    minimum: 0,
-    maximum: 1,
+    enum: [0, 1],
   })
   @IsNumber()
-  @Min(0)
-  @Max(1)
+  @IsEnum([0, 1], { message: "하트 상태는 0 또는 1이어야 합니다." })
   @IsNotEmpty({ message: "하트 상태를 지정해주세요." })
   heart: number
-}
-
-export class DiaryResponseDto {
-  @ApiProperty()
-  status: number
-
-  @ApiProperty()
-  message: string
-
-  @ApiProperty({ type: DiaryDto })
-  data: DiaryDto
-
-  @ApiProperty({
-    type: "object",
-    properties: {
-      pagination: {
-        type: "object",
-        properties: {
-          total: { type: "number" },
-          page: { type: "number" },
-          limit: { type: "number" },
-        },
-      },
-    },
-    required: false,
-  })
-  metadata?: {
-    pagination?: {
-      total: number
-      page: number
-      limit: number
-    }
-  }
 }
