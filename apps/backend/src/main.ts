@@ -3,6 +3,7 @@ import { ValidationPipe } from "@nestjs/common"
 import { NestFactory } from "@nestjs/core"
 import { NestExpressApplication } from "@nestjs/platform-express"
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger"
+import * as expressBasicAuth from "express-basic-auth"
 import * as session from "express-session"
 import * as passport from "passport"
 
@@ -23,6 +24,15 @@ async function bootstrap() {
   //passport 초기화 및 세션 저장소 초기화
   app.use(passport.initialize())
   app.use(passport.session())
+  app.use(
+    ["/api-docs"],
+    expressBasicAuth({
+      challenge: true,
+      users: {
+        [process.env.SWAGGER_USER]: process.env.SWAGGER_PASSWORD,
+      },
+    })
+  )
   const options = new DocumentBuilder()
     .setTitle("SoulFriends API Docs")
     .setDescription("SoulFriends API description")
