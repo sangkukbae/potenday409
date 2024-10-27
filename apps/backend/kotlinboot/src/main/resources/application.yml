@@ -1,0 +1,75 @@
+spring:
+  application:
+    name: soulfriends
+  datasource:
+    url: ${DB_URL:jdbc:mysql://localhost:3306/soulfriends?useSSL=false&serverTimezone=UTC&characterEncoding=UTF-8&allowPublicKeyRetrieval=true}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQLDialect
+    database: mysql
+    database-platform: org.hibernate.dialect.MySQLDialect
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: ${GOOGLE_CLIENT_ID}
+            client-secret: ${GOOGLE_CLIENT_SECRET}
+          kakao:
+            client-id: ${KAKAO_CLIENT_ID}
+            client-secret: ${KAKAO_CLIENT_SECRET}
+            client-authentication-method: POST
+            authorization-grant-type: authorization_code
+            redirect-uri: ${KAKAO_REDIRECT_URI:http://localhost:4000/api/v1/auth/kakao/callback}
+            scope:
+              - profile_nickname
+              - account_email
+            client-name: Kakao
+        provider:
+          kakao:
+            authorization-uri: https://kauth.kakao.com/oauth/authorize
+            token-uri: https://kauth.kakao.com/oauth/token
+            user-info-uri: https://kapi.kakao.com/v2/user/me
+            user-name-attribute: id
+
+server:
+  port: ${SERVER_PORT:4000}
+
+jwt:
+  secret: ${JWT_SECRET}
+  expiration: ${JWT_EXPIRATION:3600000}
+
+youtube:
+  api:
+    key: ${YOUTUBE_API_KEY}
+    url: ${YOUTUBE_API_URL:https://www.googleapis.com/youtube/v3/}
+
+clova:
+  api:
+    key: ${CLOVA_API_KEY}
+    gateway:
+      key: ${CLOVA_GATEWAY_KEY}
+    request:
+      id: ${CLOVA_REQUEST_ID}
+    url: ${CLOVA_API_URL}
+
+swagger:
+  user: ${SWAGGER_USER:soulfriends}
+  password: ${SWAGGER_PASSWORD:123!@}
+
+logging:
+  level:
+    root: INFO
+    com.soulfriends.kotlinboot: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+  file:
+    name: logs/application.log
